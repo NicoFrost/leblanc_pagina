@@ -1,0 +1,50 @@
+/* Modal */
+.ReactModalPortal > div{
+    opacity: 0;
+  }
+  
+  .ReactModalPortal .ReactModal__Overlay {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    transition: opacity .2s ease-in-out;
+    z-index: 999;
+  }
+  
+  .ReactModalPortal .ReactModal__Overlay--after-open {
+    opacity: 1;
+  }
+  
+  .ReactModalPortal .ReactModal__Overlay--before-close {
+    opacity: 0;
+  }
+
+  
+  .fab {
+    border-radius: 100%;
+    bottom: 25px;
+    font-size: 25px;
+    padding: 15px 20px;
+    position: fixed;
+    right: 25px;
+  }
+  
+  .fab-danger {
+    border-radius: 100%;
+    bottom: 25px;
+    font-size: 25px;
+    padding: 15px 20px;
+    position: fixed;
+    left: 25px;
+  }
+
+.MuiContainer-maxWidthXl {
+  min-width: 1700px;
+}
+
+.graph * line {
+  stroke: black !important;
+}
+.graph * text {
+  fill: black !important;
+}

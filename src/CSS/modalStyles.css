@@ -1,0 +1,35 @@
+/* .MuiMenu-list {
+    width: 520px;
+} */
+
+form{
+    color: black;
+}
+
+.modal-fondo {
+    background-color: rgba(0, 0, 0, 0.3);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    position: fixed;
+  }
+
+  .modal {
+    background: white;
+    border-radius: 5px;
+    color: rgb(0, 0, 0);
+    display: inline;
+    max-height: 620px;
+    max-width: 500px;
+    outline: none;
+    padding: 20px;
+  }
+
+.MuiDataGrid-menu {
+    z-index: 50 !important;
+}
+
+.form-selectors {
+  width: 224px;
+}
