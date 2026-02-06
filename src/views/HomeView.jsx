@@ -86,7 +86,6 @@ export const HomeView = () => {
   const dataset2 = invoices.reduce((acc, inv) => {
     const month = inv.settlementDate.format('MMMM');
     const monthName = month.charAt(0).toUpperCase() + month.slice(1);
-    console.log(salaries,expenses);
     
     const expensesCost = expenses
       .filter(exp => exp.date.format('MMMM').charAt(0).toUpperCase() + exp.date.format('MMMM').slice(1) === monthName)
@@ -121,10 +120,6 @@ export const HomeView = () => {
       .filter(sal => sal.date.format('MMMM').charAt(0).toUpperCase() + sal.date.format('MMMM').slice(1) === item.month)
       .reduce((sum, sal) => sum + sal.grossAmount, 0)
   }));
-
-  console.log(dataset2WithSalaries);
-  
-  console.log(dataset2);
 
   const newTheme = createTheme({ palette: { mode: 'dark' } });
   return (

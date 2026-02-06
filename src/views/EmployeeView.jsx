@@ -86,8 +86,6 @@ export const EmployeeView = () => {
     setActiveSalary(e.id)
   }
   
-  console.log(activeSalary);
-  
   return (
     <Box sx={{width:"85vw",display:"flex",justifyContent:"center"}}>
       <Box>

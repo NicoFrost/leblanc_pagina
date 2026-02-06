@@ -3,15 +3,17 @@ import { DatePicker } from '@mui/x-date-pickers'
 import {esES} from '@mui/x-date-pickers/locales'
 import { useState } from 'react'
 
-import { useInvoiceStore } from '../hooks'
+import { useInvoiceStore, useSalariesStore } from '../hooks'
 
 export const MonthPicker = (props) => {
     
     const { startLiquidationIInvoices,invoices} = useInvoiceStore()
+    const {startLiquidationSalaries} = useSalariesStore()
     const [month, setMonth] = useState()
     
     const handleSelectMonth = async () => {
         await startLiquidationIInvoices(month)
+        await startLiquidationSalaries(month)
         setMonth()
         props.onClose()
     }

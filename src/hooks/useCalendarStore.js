@@ -58,11 +58,8 @@ export const useCalendarStore = () => {
 
   const startLoadingEvents = async () => {
     try {      
-      console.time('startLoadingEvents')
       const events = contracts.flatMap((c) => generateEventsForContract(c, getEmployeeById, getBuildingByID))
-
       
-      console.timeEnd('startLoadingEvents')
       dispatch(onLoadEvents(events));
       
     } catch (error) {

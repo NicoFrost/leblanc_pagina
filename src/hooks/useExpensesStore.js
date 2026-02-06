@@ -58,21 +58,23 @@ export const useExpensesStore = () => {
 
             if(expenseData.id){
                 // const {data: dataDB} = await formApi.put('/expense/' + expenseData.id, expenseData);
-                const dataDB = await window.api.updateExpense(expenseData.id, expenseData);
+                const {msg,helpMsg,success} = await window.api.updateExpense(expenseData.id, expenseData);
 
-                if(dataDB.success) dispatch(onUpdateExpenses(expenseData));
-                if(dataDB.msg) data = {msg: dataDB.msg,helpMsg: dataDB.helpMsg}
+                if(success) {
+                    dispatch(onUpdateExpenses(expenseData)); 
+                    data = {msg,helpMsg};
+                }
             } else {
                 // const {status,data: dataDB} = await formApi.post('/expense', expenseData);
                 // const id = dataDB.expense.id;
-                const dataDB = await window.api.createExpense(expenseData);
+                const {msg,helpMsg,success,expense:dataDB} = await window.api.createExpense(expenseData);
 
                 if(dataDB) {
                     dispatch(onAddExpenses({...dataDB,date: dayjs(dataDB.date)}));
                 } else {
-                    throw new Error('No se pudo crear el contrato')
+                    throw new Error('No se pudo crear el gasto')
                 }
-                if(!dataDB) data = {msg: dataDB.msg,helpMsg: dataDB.helpMsg}
+                if(success) data = {msg,helpMsg}
             }
             Swal.fire({
                 title: data.msg,
@@ -82,7 +84,7 @@ export const useExpensesStore = () => {
             });
         } catch (error) {
             console.log(error);
-            
+            Swal.fire('Error al guardar', error , 'error');
         }
         
     }

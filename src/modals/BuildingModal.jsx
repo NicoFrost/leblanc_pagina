@@ -146,7 +146,6 @@ export const BuildingModal = ({initialForm = initialFormShape}) => {
     //* Subida
     const onSubmit = async (event) => {
         event.preventDefault()
-        console.log(event);
         
         setFormSubmitted(true);
         setTimeout(() => {
@@ -253,12 +252,14 @@ export const BuildingModal = ({initialForm = initialFormShape}) => {
                         variant="outlined"
                         sx={{ width: "100%" }}
                     />
-                    <FormControl className='form-selectors'>
-                      <InputLabel id="employee-label">Factura</InputLabel>
+                    <FormControl id="invoice-type" className='form-selectors'>
+                      <InputLabel id="invoice-type-label">Factura</InputLabel>
                       <Select
                         value={formState.type}
                         onChange={onInputChange}
                         name="type"
+                        labelId="invoice-type-label"
+                        label="Factura"
                       >
                         <MenuItem value={'A'}>A</MenuItem>
                         <MenuItem value={'B'}>B</MenuItem>

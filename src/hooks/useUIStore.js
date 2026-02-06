@@ -34,12 +34,18 @@ import {
     // Payments
     onOpenPaymentModal,
     onClosePaymentModal,
+
+    // Method
+    onOpenMethodModal,
+    onCloseMethodModal,
+
 } from "../store/ui/uiSlice"
 import {
     useBuildingsStore,
     useContractsStore,
     useEmployeesStore,
     useExpensesStore,
+    useMethodStore,
 } from "../hooks"
 import { useInvoiceStore } from "./useInvoiceStore"
 export const useUIStore = () => {
@@ -56,6 +62,7 @@ export const useUIStore = () => {
         isUserModalOpen,
         isSalaryModalOpen,
         isPaymentModalOpen,
+        isMethodModalOpen,
     } = useSelector(state => state.ui)
 
     const {setActiveBuilding} = useBuildingsStore()
@@ -63,6 +70,7 @@ export const useUIStore = () => {
     const {setActiveExpense} = useExpensesStore()
     const {setActiveContract} = useContractsStore()
     const {setActiveInvoice} = useInvoiceStore()
+    const {setActiveMethod} = useMethodStore()
     const dispatch = useDispatch()
 
     const SwitchMenu = (menu) => {
@@ -217,6 +225,19 @@ export const useUIStore = () => {
             : closePaymentModal();
     }
 
+    // Method 
+    const openMethodModal = (mode) => {
+        if(mode != 'edit'){
+            setActiveMethod(-1);
+        }
+        setTimeout(() => {
+            dispatch(onOpenMethodModal(mode))
+        }, timeout);
+    }
+
+    const closeMethodModal = () => {
+        dispatch(onCloseMethodModal())
+    }
     //* FRONTEND
     // productPage View
     // const productOnView = (productCategory) => {
@@ -230,7 +251,7 @@ export const useUIStore = () => {
         dispatch(onCloseUserModal(isSelection))
     }
     
-    
+ 
 
 
     return {
@@ -285,5 +306,10 @@ export const useUIStore = () => {
         openPaymentModal,
         closePaymentModal,
         togglePaymentModal,
+
+        // Method
+        isMethodModalOpen,
+        openMethodModal,
+        closeMethodModal,
     }
 }

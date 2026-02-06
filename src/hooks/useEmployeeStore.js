@@ -50,7 +50,7 @@ export const useEmployeesStore = () => {
             if(employeeData.id){
                 // const dataDB = undefined;
                 // const {data: dataDB} = await formApi.put('/employee/' + employeeData.id, employeeData);
-                const dataDB = await window.api.updateEmployee(employeeData.id, {
+                const {msg,helpMsg,success} = await window.api.updateEmployee(employeeData.id, {
                     ...employeeData,
                     lastname: employeeData.lastName,
                     address: employeeData.address.join(" "),
@@ -59,11 +59,11 @@ export const useEmployeesStore = () => {
                 
                 dispatch(onUpdateEmployee(employeeData));
 
-                if(dataDB.msg) data = {msg: dataDB.msg,helpMsg: dataDB.helpMsg}
+                if(success) data = {msg, helpMsg}
             } else {
                 // const dataDB = undefined;
                 // const {status,data: dataDB} = await formApi.post('/employee', employeeData);
-                const {success,employee:dataDB} = await window.api.createEmployee({
+                const {msg,helpMsg,success,employee:dataDB} = await window.api.createEmployee({
                     ...employeeData,
                     lastname: employeeData.lastName,
                     address: employeeData.address.join(" "),
@@ -79,7 +79,7 @@ export const useEmployeesStore = () => {
                 };
 
                 dispatch(onAddEmployee(employee));
-                if(dataDB.msg) data = {msg: dataDB.msg || data.msg,helpMsg: dataDB.helpMsg || data.helpMsg}
+                if(success) data = {msg,helpMsg}
             }
             Swal.fire({
                 title: data.msg,

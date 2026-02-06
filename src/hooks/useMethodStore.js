@@ -31,7 +31,7 @@ export const useMethodStore = () => {
                 dispatch(onUpdateMethod(methodData));
                 if(dataDB.msg) data = {msg: dataDB.msg,helpMsg: dataDB.helpMsg}
             } else {
-                const {success,method:dataDB} = await window.api.createMethod({
+                const {success,msg,helpMsg,method:dataDB} = await window.api.createMethod({
                     ...methodData
                 });
 
@@ -39,8 +39,11 @@ export const useMethodStore = () => {
                     ...dataDB
                 };
 
-                dispatch(onAddMethod(method));
-                if(dataDB.msg) data = {msg: dataDB.msg || data.msg,helpMsg: dataDB.helpMsg || data.helpMsg}
+                if(success) {
+                    dispatch(onAddMethod(method));
+
+                }
+                if(msg) data = {msg: msg || data.msg,helpMsg: helpMsg || data.helpMsg}
             }
             Swal.fire({
                 title: data.msg,
@@ -87,6 +90,7 @@ export const useMethodStore = () => {
     const startLoadingMethods = async () => {
       try {
         const data = await window.api?.getMethod();
+        
         if(data){ 
             const methodsArr = data.map(m => ({
                 ...m.dataValues

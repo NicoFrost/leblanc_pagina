@@ -138,7 +138,6 @@ export const ExpensesModal = ({initialForm = initialFormShape}) => {
         event.preventDefault()
 
         const date = new Date(formState.date || Date.now());
-        console.log({...formState,date});
         // const {date,...form} = formState;
         // console.log({...form,date: date?.toISOString().split('T')[0]});
         setFormSubmitted(true);
@@ -164,7 +163,7 @@ export const ExpensesModal = ({initialForm = initialFormShape}) => {
   
   return (
     <Modal
-      open={isExpensesModalOpen}
+      open={!!isExpensesModalOpen}
       onClose={onClosingModal}
       style={{
         top: "50%",

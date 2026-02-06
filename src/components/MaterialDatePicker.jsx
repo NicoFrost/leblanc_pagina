@@ -83,8 +83,6 @@ function ButtonFieldDatePicker(props) {
 
 export default function MaterialDatePicker(propsDates) {
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <ButtonFieldDatePicker {...propsDates}/>
-    </LocalizationProvider>
+    <ButtonFieldDatePicker {...propsDates}/>
   );
 }

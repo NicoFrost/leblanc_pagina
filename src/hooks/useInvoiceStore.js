@@ -95,8 +95,7 @@ export const useInvoiceStore = () => {
       try {
 
         if(!dayjs.isDayjs(settlementDate)) throw new Error("Invalid settlement date");
-                    
-        console.log(contracts);
+        if(contracts.length === 0) throw new Error("No contracts found");
         contracts.forEach(async contract => {
           
           if(contract.state && settlementDate.isBetween(contract.initialDate, contract.endDate, null, '[]')) {
@@ -127,28 +126,20 @@ export const useInvoiceStore = () => {
               
               const dataDB = await window.api.createInvoice(invoiceObject)
               // const dataDB = {id: Math.floor(Math.random() * 1000000), ...invoiceObject} // Mock ID generation
-              console.log('INVOICE A DB',invoiceObject)
               
             const invoice = {
               ...invoiceObject,
               settlementDate: settlementDate
             }
-            console.log({...dataDB,...invoice});
-
+          
             dispatch(onAddInvoice({...dataDB,...invoice}))
             enqueueSnackbar(`Factura de ${settlementDate.format('MMMM YYYY')} creada exitosamente`, { variant: 'success' });
             } else {
-              // TODO no se logro hacer las snackbars funcionar desde aquí
               enqueueSnackbar(
                 `La factura para el edificio ${contract.buildingId} en ${settlementDate.format('MMMM YYYY')} ya existe. No se crea una nueva.`,
                 { variant: 'info' }
               );
-              // Swal.fire(
-              //   'Factura existente',
-              //   `La factura para el edificio ${contract.buildingId} en ${settlementDate.format('MMMM YYYY')} ya existe. No se crea una nueva.`,
-              //   "info"
-              // );              
-            }
+           }
           };
         });
 

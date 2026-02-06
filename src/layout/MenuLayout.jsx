@@ -9,12 +9,13 @@ import { NavBar, SideBar } from "../components";
 import { BuildingModal, EmployeeModal, InvoiceModal } from "../modals";
 import { ContractModal } from "../modals/ContractModal";
 import { ExpensesModal } from "../modals/ExpensesModal";
-import { useBuildingsStore, useEmployeesStore, useExpensesStore, useSalariesStore } from "../hooks";
+import { useBuildingsStore, useEmployeesStore, useExpensesStore, useMethodStore, useSalariesStore } from "../hooks";
 import { useContractsStore } from "../hooks/useContractStore";
 import { useInvoiceStore } from "../hooks/useInvoiceStore";
 import { MonthPicker } from "../components/MonthPicker";
 import { SnackbarProvider } from "notistack";
 import { SalaryModal } from "../modals/SalaryModal";
+import { MethodModal } from "../modals/MethodModal";
 // TODO CREAR NUEVOS MODALS Y IMPORTARLOS
 // import { MovementModal, ProviderModal, SelectionModal } from "../modals";
 // import { ProductModal } from "../modals/ProductModal";
@@ -66,6 +67,7 @@ export const MenuLayout = ({children}) => {
   const {activeContract} = useContractsStore()
   const {activeInvoice} = useInvoiceStore()
   const {activeSalary} = useSalariesStore()
+  const {activeMethod} = useMethodStore()
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -114,6 +116,7 @@ export const MenuLayout = ({children}) => {
           <ExpensesModal initialForm={activeExpense}/>
           <InvoiceModal initialForm={activeInvoice}/>
           <SalaryModal initialForm={activeSalary}/>
+          <MethodModal/> 
           <MonthPicker 
             open={open} 
             onClose={handleClose} 

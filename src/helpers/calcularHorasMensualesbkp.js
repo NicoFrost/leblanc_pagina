@@ -1,13 +1,13 @@
 import dayjs from "dayjs";
 
-function countWeekdayInMonth(weekday, month, year, limitDate) {
+function countWeekdayInMonth(weekday, month, year) {
   let date = dayjs(`${year}-${String(month + 1).padStart(2, '0')}-01`);
   
   let count = 0;
    
   
   while (
-    date.month() === month && (limitDate ? date <= limitDate : true)
+    date.month() === month
   ) {
     if (date.day() === weekday) count++;
     date = date.add(1, 'day');
@@ -24,7 +24,6 @@ function countWeekdayInMonth(weekday, month, year, limitDate) {
  *                                            y el rango es una cadena "HH:mm-HH:mm"
  * @param {number} mes - Número del mes (1-12) para el cual calcular las horas
  * @param {number} año - Año para el cual calcular las horas
- * @param {dayjs.Dayjs} limitDate - Fecha límite para contar los días (inclusive)
  * @returns {number|undefined} Total de horas mensuales. Retorna undefined si algún parámetro es falsy
  * 
  * @example
@@ -34,7 +33,7 @@ function countWeekdayInMonth(weekday, month, year, limitDate) {
  * ];
  * calcularHorasMensuales(turnos, 3, 2024); // Retorna total de horas en marzo 2024
  */
-export default function calcularHorasMensuales(turnos, mes, año, limitDate) {
+export default function calcularHorasMensualesbkp(turnos, mes, año) {
   
   if(!(turnos || mes || año)) return;
 
@@ -48,12 +47,12 @@ export default function calcularHorasMensuales(turnos, mes, año, limitDate) {
 
     const start = dayjs(`2020-01-01 ${ini}`);
     const end   = dayjs(`2020-01-01 ${fin}`);
+    
     const horas = end.diff(start, 'minute') / 60;
+    const ocurrencias = countWeekdayInMonth(map[dia], mes, año);
     
-    const ocurrencias = countWeekdayInMonth(map[dia], mes, año,limitDate);
-    
-    // console.log(`Día: ${dia} | ${map[dia]} - Horas por turno: ${horas} - Ocurrencias en mes: ${ocurrencias} - ${mes} - ${año} - ${limitDate}`);
-    
+    // console.log(`Día: ${dia} - Horas por turno: ${horas} - Ocurrencias en mes: ${ocurrencias}`);
+    // console.log(horas,ocurrencias,total)
     total += horas * ocurrencias;
     
   }

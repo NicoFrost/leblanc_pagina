@@ -10,7 +10,7 @@ const employeeColumns = [
       return `${row.name || ''} ${row.lastName || ''}`
     }
   },
-  { field: 'phone', headerName: 'Teléfono', width: 100,headerAlign:'center', valueGetter: (value,row) => { console.log(row);
+  { field: 'phone', headerName: 'Teléfono', width: 100,headerAlign:'center', valueGetter: (value,row) => {
    return row.phone.join(' ') }},
   { field: 'address', headerName: 'Direccion', width: 200,headerAlign:'center' },
   { field: 'arca',headerName: 'ARCA?',width:100,type:'boolean',align:'center',headerAlign:'center' },

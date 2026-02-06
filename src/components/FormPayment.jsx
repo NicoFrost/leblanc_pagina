@@ -11,6 +11,7 @@ import 'dayjs/locale/es'          // importa la locale
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import localeData from 'dayjs/plugin/localeData'
 import { useMethodStore } from '../hooks/useMethodStore';
+import { MethodField } from './MethodField';
 
 
 dayjs.extend(localizedFormat)
@@ -53,8 +54,8 @@ export const FormCollection = ({onInputChange,formState,onAdd,onReset,formType})
                 <Box sx={{width:"60%",display:"flex",justifyContent:"space-between"}}>
                     <TextField label="Importe" name='amount' sx={{width:"60%",marginRight:"10px"}} onChange={onInputChange} value={formState.amount}/>
                     <FormControl fullWidth sx={{width:"40%"}}>
-                        <InputLabel>Tipo de pago</InputLabel>
-                        <Select name='type' value={formState.type} onChange={onInputChange} >
+                        <InputLabel id="type-label">Tipo de pago</InputLabel>
+                        <Select id='type-label' label='Tipo de pago' name='type' value={formState.type} onChange={onInputChange} >
                             <MenuItem value='advance'>Adelanto</MenuItem>
                             <MenuItem value='full'>Completo</MenuItem>
                             <MenuItem value='partial'>Parcial</MenuItem>
@@ -92,18 +93,7 @@ export const FormCollection = ({onInputChange,formState,onAdd,onReset,formType})
             </Box>
         </Box>
         <Box display={'flex'} justifyContent={'space-between'}>
-            <Box width={"100%"}>
-                <FormControl fullWidth sx={{marginBottom:"10px"}}>
-                    <InputLabel>Metodo</InputLabel>
-                    <Select name='methodId' value={formState.methodId} onChange={onInputChange}>
-                        {methods.map((method) => (
-                            <MenuItem sx={{backgroundColor: method.color || 'white'}} key={method.id} value={method.id}>
-                                {(method.name) ? method.name : method.type[0].toUpperCase() + method.type.slice(1)} 
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            </Box> 
+            <MethodField methodId={formState.methodId} onInputChange={onInputChange}/>
         </Box>
         <Box  sx={{marginTop:"40px",textAlign:"center"}}>
             <Button type='submit' variant='outlined'>Agregar Pago</Button>

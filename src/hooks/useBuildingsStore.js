@@ -34,17 +34,17 @@ export const useBuildingsStore = () => {
 
             if(buildingData.id){
                 // const {data: dataDB} = await formApi.put('/building/' + buildingData.id, buildingData);
-                const dataDB = await window.api.updateBuilding(buildingData.id, {
+                const {msg,helpMsg,success} = await window.api.updateBuilding(buildingData.id, {
                     ...buildingData,
                     address: buildingData.address.join(" "),
                     phone: buildingData.phone.join(" ")
                 });
                 
                 dispatch(onUpdateBuildings(buildingData));
-                if(dataDB.msg) data = {msg: dataDB.msg,helpMsg: dataDB.helpMsg}
+                if(success) data = {msg,helpMsg}
             } else {
                 // const {status,data: dataDB} = await formApi.post('/building', buildingData);
-                const {dataValues: dataDB} = await window.api.createBuilding({
+                const {msg,helpMsg,success,building: dataDB} = await window.api.createBuilding({
                     ...buildingData,
                     address: buildingData.address.join(" "),
                     phone: buildingData.phone.join(" ")
@@ -52,13 +52,13 @@ export const useBuildingsStore = () => {
                 
                 const building = {
                     ...dataDB,
-                    address: dataDB.address.split(" "),
-                    phone: dataDB.phone.split(" ")
+                    address: dataDB.address ? dataDB.address.split(" ") : [],
+                    phone: dataDB.phone ? dataDB.phone.split(" ") : []
                 }
                 
                 // const id = dataDB.building.id;
                 dispatch(onAddBuildings(building));
-                if(dataDB.msg) data = {msg: dataDB.msg,helpMsg: dataDB.helpMsg}
+                if(success) data = {msg,helpMsg}
             }
             Swal.fire({
                 title: data.msg,
@@ -68,7 +68,7 @@ export const useBuildingsStore = () => {
             });
         } catch (error) {
             console.log(error);
-            
+            Swal.fire('Error al guardar', error , 'error');
         }
         
     }

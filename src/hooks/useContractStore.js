@@ -102,7 +102,6 @@ export const useContractsStore = () => {
                 } else {
                     throw new Error('No se pudo crear el contrato');
                 }
-                console.log(dataDB);
                 if(dataDB) data = {msg,helpMsg}
             }
 

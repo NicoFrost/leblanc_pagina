@@ -2,12 +2,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { onAddSalary, onLoadSalaries, onUpdateSalary, onDeleteSalary, onSetActiveSalary } from "../store/system/salariesSlice";
 import dayjs from "dayjs";
 import { enqueueSnackbar } from "notistack";
+import calcularHorasMensuales from "../helpers/calcularHorasMensuales";
 
 
 export const useSalariesStore = () => {
 
     const {salaries, activeSalary} = useSelector(state => state.salaries);
     const {payments} = useSelector(state => state.payments);
+    const {employees} = useSelector(state => state.employee);
+    const {contracts} = useSelector(state => state.contract);
     const dispatch = useDispatch();
 
 
@@ -16,14 +19,16 @@ export const useSalariesStore = () => {
         try {
         const dataDB = await window.api.getSalaries();
         
+        
         if(dataDB){
             const formattedSalaries = dataDB.map((salary) => {
                 return {
                     ...salary.dataValues,
-                    date: dayjs(salary.dataValues.date),
+                    date: dayjs(salary.dataValues.paidDate),
                 }
             })
 
+            
             dispatch(onLoadSalaries(formattedSalaries));
             
         } else {
@@ -138,6 +143,44 @@ export const useSalariesStore = () => {
         dispatch(onSetActiveSalary(salaries.find(s => s.id === salary)));
     }
     
+    const startLiquidationSalaries = async (settlementDate) => {
+        try {
+            if(!settlementDate) throw new Error("Invalid settlement date");
+            // Lógica de liquidación aquí
+
+            employees.forEach(async employee => {
+
+                const contract = contracts.find(contract => contract.employeeId === employee.id);
+
+
+
+                const totalHoras = calcularHorasMensuales(contract.days,settlementDate.month(),settlementDate.year(), contract.endDate);
+                
+                const dataDB = await window.api.createSalary({
+                    employeeId: employee.id,
+                    grossAmount: (contract.hourlyRate * totalHoras),
+                    period: settlementDate.year() + "-" + (settlementDate.month() + 1),
+                    paidDate: settlementDate.toDate(),
+                    paid: false,
+                    state: true,
+                });
+                console.log(dataDB);
+                
+                dispatch(onAddSalary({
+                    ...dataDB,
+                    date: dayjs(dataDB.date),
+                }));
+
+                enqueueSnackbar("Salario de " + employee.name + " para " + settlementDate.year() + "-" + (settlementDate.month() + 1), { variant: 'success' });
+            })
+
+
+        } catch (error) {
+            enqueueSnackbar(error.message || 'Error liquidando salario', {variant:"warning"})
+            console.log({msg: 'Error liquidando salario', error})
+        }
+    }
+
     return {
         salaries,
         activeSalary,
@@ -147,5 +190,6 @@ export const useSalariesStore = () => {
         startDeletingSalary,
         setSettleSalary,
         setActiveSalary,
+        startLiquidationSalaries,
     };
 }

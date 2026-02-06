@@ -6,10 +6,11 @@ import { Provider } from 'react-redux'
 import { store } from './store/index.js'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import 'dayjs/locale/es'          // importa la locale
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
       <Provider store={store}>
         <App />
       </Provider>

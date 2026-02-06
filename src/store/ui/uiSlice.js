@@ -70,6 +70,13 @@ export const uiSlice = createSlice({
         onClosePaymentModal: (state) => {
             state.isPaymentModalOpen = false;
         },
+        // Method
+        onOpenMethodModal: (state,{payload}) => {
+            state.isMethodModalOpen = payload || true;
+        },
+        onCloseMethodModal: (state) => {
+            state.isMethodModalOpen = false;
+        },
         // User
         onOpenUserModal: (state,{payload}) => {
             state.isUserModalOpen = payload || true;
@@ -114,4 +121,8 @@ export const {
     onOpenPaymentModal,
     onClosePaymentModal,
     
+    // METHOD
+    onOpenMethodModal,
+    onCloseMethodModal,
+
 } = uiSlice.actions;

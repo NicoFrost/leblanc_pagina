@@ -85,9 +85,7 @@ export const ReportsView = () => {
   // }
   // const handleAlertClose = () => {  
   //   setAlertOpen(false)
-  // }
-  console.log(formState);
-  
+  // }  
 
   return (
     <Box sx={{width:"85vw",display:"flex",justifyContent:"center"}}>

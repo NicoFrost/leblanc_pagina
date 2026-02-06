@@ -1,7 +1,7 @@
 import { Box, Button, CircularProgress, Divider, Fade, FormControl, FormControlLabel, InputLabel, MenuItem, Modal, Paper, Popper, Select, Switch, TextField, Typography } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import CheckIcon from '@mui/icons-material/Check';
 import React, { useEffect, useState, useMemo, useRef } from 'react'
 import { useBuildingsStore, useEmployeesStore, useForm, useUIStore } from '../hooks';
@@ -10,7 +10,7 @@ import { useContractsStore } from '../hooks/useContractStore';
 import dayjs from 'dayjs';
 import { DayTimeStartEnd } from '../components/DayTimeStartEnd';
 
-import 'dayjs/locale/es'          // importa la locale
+// import 'dayjs/locale/es'          // importa la locale
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import localeData from 'dayjs/plugin/localeData'
 import calcularHorasMensuales from '../helpers/calcularHorasMensuales';
@@ -100,13 +100,13 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
     const [totalXMes, setTotalXMes] = useState('')
     const [salarioEmpleada, setSalarioEmpleada] = useState('')
     const [ganancia, setGanancia] = useState('')
-
+    
     useEffect(() => {
         
         if(!localDays) return
         
-        const totalHoras = calcularHorasMensuales(localDays,dayjs("1/1/26").month(),dayjs("1/1/26").year())
-        // const totalHoras = calcularHorasMensuales(localDays,dayjs(formState.initialDate).month(),dayjs(formState.initialDate).year())
+        // const totalHoras = calcularHorasMensuales(localDays,dayjs("1/1/26").month(),dayjs("1/1/26").year())
+        const totalHoras = calcularHorasMensuales(localDays,dayjs(formState.initialDate).month(),dayjs(formState.initialDate).year(),dayjs(formState.endDate));
         if(isNaN(totalHoras)) return
         setHoraXMes(totalHoras);
         
@@ -117,7 +117,7 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
         setSalarioEmpleada(SalarioMensualEmpleada)
         setGanancia(gananciaBruta - SalarioMensualEmpleada)
         
-    },[localDays,formState.initialDate,formState.hourlyRate,formState.hoursPerDay])
+    },[localDays,formState.initialDate,formState.hourlyRate,formState.hoursPerDay,formState.endDate])
 
     // TODO SE DEBE MODIFICAR PARA CUANDO SE CREA UNO INSITU SE PONGA EL NUEVO ID DEL BUILDING/EMPLOYEE EN formState.employeeId/formState.buildingId
     useEffect(() => {
@@ -140,7 +140,6 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
 
 
     const onClosingModal = () => {
-        console.log(Object.keys(formState));
         
         if(Object.keys(formState).length > 2 && isContractModalOpen != 'readonly') {
             Swal.fire({
@@ -180,8 +179,6 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
         const dayKey = day.split('-')[1];
         const start = inicio ?? '';
         const newEntry = [dayKey, `${start.format('HH:mm')}-`];
-        
-        console.log(newEntry);
         
         setLocalDays(prev => {
             
@@ -253,17 +250,8 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
     const onSubmit = async (event) => {
         event.preventDefault()
 
-
-        // const initialDate = new Date(formState.initialDays || Date.now());
-        // const endDate = new Date(formState.endDays || Date.now());
-        // console.log(formState);
-        // console.log();
-        
-        // const initialDate = dayjs(formState.initialDate);
-        // const endDate = dayjs(formState.endDate);
         setFormSubmitted(true);
         setTimeout(() => {
-            console.log(formState);
             startSavingContract({
                 ...formState,
                 hourlyRate: parseInt(formState.hourlyRate),
@@ -272,6 +260,14 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
                 state: true,
             })
             setFormSubmitted(false);
+            setActiveContract({})
+            onResetForm()
+
+            setLocalDays([])
+            setHoraXMes('')
+            setTotalXMes('')
+            setSalarioEmpleada('')
+            setGanancia('')
             closeContractModal()
         }, 3000);
     }
@@ -312,10 +308,10 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
             style={{
                 top: '50%',
                 left: '50%',
-                zIndex:50
+                zIndex:50,
             }}
         >
-            <Box>
+            <Box sx={{width:0,backgroundColor: 'rgba(0, 0, 0, 0.5)',}}>
                 <Box
 
                     component={'form'}
@@ -333,7 +329,7 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
                     }}
                     id="contract-form"
                 >
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    {/* <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es"> */}
                     {/* <h1>{(activeEmployee == undefined) ? "Nuevo Empleado/a" : "Editar Empleado/a" }</h1> */}
                     <h2 style={{fontSize: "40px", textAlign: "center",margin:"0px"}}>CONTRATO</h2>
                     <h2 style={{fontSize: "30px",fontWeight:"normal", textAlign: "center",margin:"0px",marginBottom:"30px"}}>
@@ -349,6 +345,7 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
                                     label={day}
                                     value={day}
                                     // checked={formState.days?.includes('L')}
+                                    key={day}
                                     checked={dias?.includes(day)}
                                     onChange={handleDaysChange}
                                 />
@@ -358,7 +355,7 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
                     <Box>
                             {
                                 [['L','Lunes'],['M','Martes'],['X','Miercoles'],['J','Jueves'],['V','Viernes'],['S','Sabado']].map(day => {
-                                    return (dias?.includes(day[0])) && <DayTimeStartEnd disabled={isContractModalOpen === 'readonly'} title={day[1]} dayActive={day[0]} horarios={localDays} handlerInicio={handleStartHoursChange} handlerFinal={handleEndHoursChange}/>
+                                    return (dias?.includes(day[0])) && <DayTimeStartEnd key={day[0]} disabled={isContractModalOpen === 'readonly'} title={day[1]} dayActive={day[0]} horarios={localDays} handlerInicio={handleStartHoursChange} handlerFinal={handleEndHoursChange}/>
                                 })
                             }
                     </Box>  
@@ -370,12 +367,13 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
                                     <Typography marginY={2} textAlign={'center'}>{dayjs(formState.initialDate).format('DD/MM/YYYY')}</Typography>
                                     :
                                     <DatePicker 
-                                        name='initialDate' 
+                                        name='initialDate'
                                         // disablePast  
                                         disabled={isContractModalOpen === 'readonly'}
                                         defaultValue={undefined}
                                         value={formState.initialDate ? dayjs(formState.initialDate) : null} 
                                         onChange={(date) => {onInputChange({ target: { name: 'initialDate', value: date }})}} 
+
                                     />
                             }
                         </Box>
@@ -389,6 +387,7 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
                                     disabled={!formState.initialDate || isContractModalOpen === 'readonly'}
                                     name='endDate' 
                                     // disablePast
+                                    localeText={{ start: 'lunes', end: 'domingo' }}
                                     minDate={formState.initialDate ? dayjs(formState.initialDate) : null} 
                                     value={formState.endDate ? dayjs(formState.endDate) : null} 
                                     onChange={(date) => onInputChange({ target: { name: 'endDate', value: date } })}
@@ -482,7 +481,7 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
                         </Button>
                         }
                     </Box>
-                    </LocalizationProvider>
+                    {/* </LocalizationProvider> */}
                 </Box>
                 <Box
                     sx={{
@@ -499,9 +498,9 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
                 >
                     <Typography variant='h6'>Hora x Mes: {horaXMes}</Typography>
                     {(getBuildingByID(formState.buildingId)?.type !== "A") && <Typography variant='h6'>Hora $ c/IVA: {(new Number(formState.hourlyRate) * 0.21 + new Number(formState.hourlyRate)).toLocaleString('es-ES')}</Typography>}
-                    <Typography variant='h6'>IVA x Hora: {((horaXMes * formState.hourlyRate) * 0.21).toLocaleString('es-ES')}</Typography>
                     <Typography variant='h6'>Total x Mes (neto) $: {totalXMes.toLocaleString('es-ES')}</Typography>
-                    <Typography variant='h6'>Salario Empleada x Mes: {salarioEmpleada.toLocaleString('es-ES')}</Typography>
+                    <Typography variant='h6'>IVA: {new Number((horaXMes * formState.hourlyRate) * 0.21).toLocaleString('es-ES')}</Typography>
+                    <Typography variant='h6'>Salario Empleada x Mes: {new Number(salarioEmpleada).toLocaleString('es-ES')}</Typography>
                     <Typography variant='h6'>Facturacion Mensual Aprox $ (con IVA): {((horaXMes * formState.hourlyRate) + ((horaXMes * formState.hourlyRate) * 0.21 )).toLocaleString('es-ES')}</Typography>
                     <Typography variant='h5' color={(ganancia > 0) ? 'green' : (ganancia) ? 'red' : 'black' }>Ganancia (sin iva): {ganancia.toLocaleString('es-ES')} (%{Math.floor((ganancia/totalXMes) * 100)})</Typography>
                     <Typography variant='subtitle1'>*datos calculados con mes actual</Typography>
