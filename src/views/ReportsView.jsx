@@ -14,7 +14,7 @@ export const ReportsView = () => {
   
   const {buildings} = useBuildingsStore()
   const {setActiveInvoice,setSettleInvoice,invoices} = useInvoiceStore()
-  const {openInvoiceModal} = useUIStore()
+  const {darkMode,openInvoiceModal} = useUIStore()
   const {collections, startSavingCollection} = useCollectionStore()
   // Prueba de agregado y eliminacion
   
@@ -86,27 +86,28 @@ export const ReportsView = () => {
   // const handleAlertClose = () => {  
   //   setAlertOpen(false)
   // }  
-
+  console.log(darkMode);
+  
   return (
     <Box sx={{width:"85vw",display:"flex",justifyContent:"center"}}>
       <Box>
-        
       <EditableGrid
+          mTop="20px"
           columns={invoiceColumn}
           rows={invoices.filter(i => i.state === true)}
-          
+          colorTitle={'secondary'}
           title='Facturas'
           CRUDButtons={false}
           onRowClick={handleClickInspect}
           isRowSelectable={(params) => params.row.settled == false}
           checkboxSelection 
-
           onSelection={(ids) => setSelection(ids)}
           rowSelection={selection}
           disableRowSelectionOnClick
+          height="100px"
       />
       <Divider sx={{margin:"10px 0 30px 0","::before": { borderColor: "primary.main" }, "::after": { borderColor: "primary.main" }}}>
-        <Typography variant='h5'>Cobranzas</Typography>
+        <Typography sx={{color:(darkMode) ? 'secondary.contrastText' : 'secondary.main' }} variant='h5'>Cobranzas</Typography>
       </Divider>
       <FormCollection
         formState={formState}

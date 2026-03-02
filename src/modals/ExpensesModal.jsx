@@ -36,6 +36,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/es'          // importa la locale
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import localeData from 'dayjs/plugin/localeData'
+import { ModalLayout } from '../layout/ModalLayout';
 
 dayjs.extend(localizedFormat)
 dayjs.extend(localeData)
@@ -174,21 +175,10 @@ export const ExpensesModal = ({initialForm = initialFormShape}) => {
       // overlayClassName='modal-fondo'
       // onAfterOpen={onOpen}
     >
-      <Box
-        sx={{
-          position: "absolute",
-          transform: "translate(-50%, -50%)",
-          width: 500,
-          bgcolor: "background.paper",
-          border: "2px solid #000",
-          borderRadius: "10px",
-          boxShadow: 24,
-          p: 4,
-        }}
-      >
+      <ModalLayout width={500}>
         {/* <h1>{(activeEmployee == undefined) ? "Nuevo Empleado/a" : "Editar Empleado/a" }</h1> */}
-        <h2 style={{ color: "black", fontSize: "40px", textAlign: "center" }}>
-          {(false) ? "Nuevo Gasto" : activeExpense?.description}
+        <h2>
+          {(true) ? "Nuevo Gasto" : activeExpense?.description}
         </h2>
         <Divider sx={{ marginY: "10px" }} />
         <Box
@@ -293,7 +283,7 @@ export const ExpensesModal = ({initialForm = initialFormShape}) => {
               )}
             </Box>
         </Box>
-      </Box>
+      </ModalLayout>
     </Modal>
   );
 }

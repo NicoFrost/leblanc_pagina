@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useCollectionStore, useInvoiceStore, useUIStore } from '../hooks'
 import { Box, Divider, List, ListItemButton, ListItemText, ListSubheader, Modal, Typography } from '@mui/material'
 import { useMethodStore } from '../hooks/useMethodStore'
+import { ModalLayout } from '../layout/ModalLayout'
 
 export const InvoiceModal = () => {
 
@@ -44,19 +45,7 @@ export const InvoiceModal = () => {
             }}
         >
             <Box>
-                <Box
-                    sx={{
-                        position: "absolute",   
-                        transform: "translate(-100%, -50%)",
-                        width: 500,
-                        bgcolor: "background.paper",
-                        border: "2px solid #000",
-                        borderRadius: "10px",
-                        boxShadow: 24,
-                        color:"black",  
-                        p: 4,
-                    }}
-                >
+                <ModalLayout offset='-100%' width={500}>
                     {/* <h1>{(activeEmployee == undefined) ? "Nuevo Empleado/a" : "Editar Empleado/a" }</h1> */}
                     <h2 style={{ color: "black", fontSize: "20px", textAlign: "center" }}>
                         Detalles de Factura {(activeInvoice) ? activeInvoice.id : ''}
@@ -93,25 +82,13 @@ export const InvoiceModal = () => {
                         </Box>
 
                     </Box>
-                </Box>
-                <Box
-                    sx={{
-                        // position: "absolute",
-                        transform: "translate(10%, -50%)",
-                        width: 500,
-                        bgcolor: "background.paper",
-                        border: "2px solid #000",
-                        borderRadius: "10px",
-                        boxShadow: 24,
-                        color:"black",
-                        p: 4,
-                    }}
-                >
-                    <img width={"100%"} height={"600px"} 
+                </ModalLayout>
+                <ModalLayout width={500} offset={"10%"}>
+                    <img width={"100%"} height={"100%"} 
                         src={(selectedIndex.imageURL) ? selectedIndex.imageURL : "https://res.cloudinary.com/du7nakzdh/image/upload/v1763524852/leblanc/no-image_j12lcb.jpg"}
                         // src={}
                     />
-                </Box>
+                </ModalLayout>
         </Box>
         </Modal>
   )

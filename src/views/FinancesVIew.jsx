@@ -72,6 +72,7 @@ export const FinancesView = () => {
         <EditableGrid
           title='Contratos'
           collectionName="contracts"
+          colorTitle={'secondary'}
           columns={contractColumns}
           rows={contracts}
           
@@ -91,6 +92,7 @@ export const FinancesView = () => {
         <EditableGrid
           title='Gastos'
           collectionName="expenses"
+          colorTitle={'secondary'}
           columns={expensesColumns}
           rows={expenses}
           buttonsPosition='end'

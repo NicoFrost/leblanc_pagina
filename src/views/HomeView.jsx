@@ -123,102 +123,100 @@ export const HomeView = () => {
 
   const newTheme = createTheme({ palette: { mode: 'dark' } });
   return (
-    <ThemeProvider theme={newTheme}>
-      <Box sx={{display:"flex",flexDirection:'row',gap:2,marginTop:4}}>
-        <Box sx={{ width: '70%', height: chartHeight }}>
-          <ChartContainer
-            series={series}
-            className='graph'
-            xAxis={[
-              {
-                id: 'months',
-                dataKey: 'month',
-                scaleType: 'band',
-                // Etiqueta del eje X
-                label: 'Mes', 
-                height: 30,
-              },
-            ]}
-            yAxis={[
-              {
-                id: 'money',
-                scaleType: 'linear',
-                valueFormatter: valueFormatter,
-                // Etiqueta del eje Y
-                label: 'Dinero ($)', 
-                width: 80,
-              },
-            ]}
-            dataset={dataset2WithSalaries}
-            // Margen para dejar espacio a la leyenda en la parte inferior
-            margin={{ bottom: 70, left: 80 }} // Aumentar el margen inferior
-          >
-            {/* Componentes de Plot: definen cómo se visualizan los datos */}
-            <BarPlot />
-            <LinePlot />
-            
-            {/* Componentes de Eje: enlazados por sus 'axisId' */}
-            <ChartsXAxis fill='black' axisId="months" />
-            <ChartsYAxis fill='black' axisId="money"/>
+    <Box sx={{display:"flex",flexDirection:'row',gap:2,marginTop:4}}>
+      <Box sx={{ width: '70%', height: chartHeight }}>
+        <ChartContainer
+          series={series}
+          className='graph'
+          xAxis={[
+            {
+              id: 'months',
+              dataKey: 'month',
+              scaleType: 'band',
+              // Etiqueta del eje X
+              label: 'Mes', 
+              height: 30,
+            },
+          ]}
+          yAxis={[
+            {
+              id: 'money',
+              scaleType: 'linear',
+              valueFormatter: valueFormatter,
+              // Etiqueta del eje Y
+              label: 'Dinero ($)', 
+              width: 80,
+            },
+          ]}
+          dataset={dataset2WithSalaries}
+          // Margen para dejar espacio a la leyenda en la parte inferior
+          margin={{ bottom: 70, left: 80 }} // Aumentar el margen inferior
+        >
+          {/* Componentes de Plot: definen cómo se visualizan los datos */}
+          <BarPlot />
+          <LinePlot />
+          
+          {/* Componentes de Eje: enlazados por sus 'axisId' */}
+          <ChartsXAxis fill='black' axisId="months" />
+          <ChartsYAxis fill='black' axisId="money"/>
 
-            {/* Componentes Auxiliares */}
-            <ChartsTooltip trigger="axis" />
-            <ChartsLegend direction="horizontal" position={{ vertical: 'bottom', horizontal: 'center' }} />
-          </ChartContainer>
+          {/* Componentes Auxiliares */}
+          <ChartsTooltip trigger="axis" />
+          <ChartsLegend direction="horizontal" position={{ vertical: 'bottom', horizontal: 'center' }} />
+        </ChartContainer>
+      </Box>
+      <Box sx={{width:500,height:600,backgroundColor:"white",display:'flex',flexDirection:'column',paddingRight:5}}>
+        <Box width={"100%"} height={"50%"} sx={{backgroundColor:"rgba(255, 0, 0, 0.47)",overflow:'auto',p:2,overflowY:'hidden'}}>
+          <h3>Últimos Gastos</h3>
+          <table style={{width:'100%',borderCollapse:'collapse'}}>
+            <thead>
+              <tr style={{borderBottom:'1px solid #ccc'}}>
+                <th style={{textAlign:'left',padding:'8px'}}>Concepto</th>
+                <th style={{textAlign:'left',padding:'8px'}}>Monto</th>
+                <th style={{textAlign:'left',padding:'8px'}}>Fecha</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                expenses.slice(0, 5).map((exp) => (
+                  <tr key={exp.id} style={{borderBottom:'1px solid #eee'}}>
+                    <td style={{padding:'8px'}}>{exp.description}</td>
+                    <td style={{padding:'8px'}}>${exp.amount}</td>
+                    <td style={{padding:'8px'}}>{exp.date.format('DD/MM/YYYY')}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
         </Box>
-        <Box sx={{width:500,height:600,backgroundColor:"white",display:'flex',flexDirection:'column',paddingRight:5}}>
-          <Box width={"100%"} height={"50%"} sx={{backgroundColor:"rgba(255, 0, 0, 0.47)",overflow:'auto',p:2,overflowY:'hidden'}}>
-            <h3>Últimos Gastos</h3>
-            <table style={{width:'100%',borderCollapse:'collapse'}}>
-              <thead>
-                <tr style={{borderBottom:'1px solid #ccc'}}>
-                  <th style={{textAlign:'left',padding:'8px'}}>Concepto</th>
-                  <th style={{textAlign:'left',padding:'8px'}}>Monto</th>
-                  <th style={{textAlign:'left',padding:'8px'}}>Fecha</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  expenses.slice(0, 5).map((exp) => (
-                    <tr key={exp.id} style={{borderBottom:'1px solid #eee'}}>
-                      <td style={{padding:'8px'}}>{exp.description}</td>
-                      <td style={{padding:'8px'}}>${exp.amount}</td>
-                      <td style={{padding:'8px'}}>{exp.date.format('DD/MM/YYYY')}</td>
+        <Divider/>
+        <Box sx={{width: '100%',height:"50%",overflow:'auto',p:2,backgroundColor:"rgba(0, 255, 0, 0.47)",overflowY:'hidden'}}>
+          <h3>Próximos Eventos</h3>
+          <table style={{width:'100%',borderCollapse:'collapse'}}>
+            <thead>
+              <tr style={{borderBottom:'1px solid #ccc'}}>
+                <th style={{textAlign:'left',padding:'8px'}}>Evento</th>
+                <th style={{textAlign:'left',padding:'8px'}}>Fecha</th>
+                <th style={{textAlign:'left',padding:'8px'}}>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                eventsRecents
+                  .filter((e) => dayjs(e.start).isAfter(dayjs()) && dayjs(e.start).isBefore(dayjs().add(7, 'day')))
+                  .slice(0, 3)
+                  .map((e) => (
+                    <tr key={e.id} style={{borderBottom:'1px solid #eee'}}>
+                      <td style={{padding:'8px',width: "150px"}}>{e.title}</td>
+                      <td style={{padding:'8px'}}>{dayjs(e.start).format('HH:mm DD/MM/YYYY')}</td>
+                      <td style={{padding:'8px'}}>Próximo</td>
                     </tr>
                   ))
-                }
-              </tbody>
-            </table>
-          </Box>
-          <Divider/>
-          <Box sx={{width: '100%',height:"50%",overflow:'auto',p:2,backgroundColor:"rgba(0, 255, 0, 0.47)",overflowY:'hidden'}}>
-            <h3>Próximos Eventos</h3>
-            <table style={{width:'100%',borderCollapse:'collapse'}}>
-              <thead>
-                <tr style={{borderBottom:'1px solid #ccc'}}>
-                  <th style={{textAlign:'left',padding:'8px'}}>Evento</th>
-                  <th style={{textAlign:'left',padding:'8px'}}>Fecha</th>
-                  <th style={{textAlign:'left',padding:'8px'}}>Estado</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  eventsRecents
-                    .filter((e) => dayjs(e.start).isAfter(dayjs()) && dayjs(e.start).isBefore(dayjs().add(7, 'day')))
-                    .slice(0, 3)
-                    .map((e) => (
-                      <tr key={e.id} style={{borderBottom:'1px solid #eee'}}>
-                        <td style={{padding:'8px',width: "150px"}}>{e.title}</td>
-                        <td style={{padding:'8px'}}>{dayjs(e.start).format('HH:mm DD/MM/YYYY')}</td>
-                        <td style={{padding:'8px'}}>Próximo</td>
-                      </tr>
-                    ))
-                }
-              </tbody>
-            </table>
-          </Box>
+              }
+            </tbody>
+          </table>
         </Box>
       </Box>
-    </ThemeProvider>
+    </Box>
   )
 }

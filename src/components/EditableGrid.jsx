@@ -2,6 +2,7 @@ import { Box, Button, ButtonGroup, Divider, MenuItem, TextField, Typography } fr
 import { DataGrid } from '@mui/x-data-grid'
 import { esES } from '@mui/x-data-grid/locales'
 import PropTypes from 'prop-types'
+import { useUIStore } from '../hooks'
 
 const ShowElements = [
   {
@@ -60,12 +61,19 @@ const ExampleRow = [
 
 
 
-export const EditableGrid = ({loadState,buttonsPosition = 'start',pagination = [5,25,100,240],children,rowSelection = false,onSelection,onAdd,onEdit,onDelete,rows = ExampleRow,columns = ExampleColumn,activeElement = {},CRUDButtons = true,ActiveAndInactiveSelect = false,slots,title = "",spacing = "0px",...otherSettings}) => {
+export const EditableGrid = ({height = "250px",mTop = "0px",colorTitle,loadState,buttonsPosition = 'start',pagination = [5,25,100,240],children,rowSelection = false,onSelection,onAdd,onEdit,onDelete,rows = ExampleRow,columns = ExampleColumn,activeElement = {},CRUDButtons = true,ActiveAndInactiveSelect = false,slots,title = "",spacing = "0px",...otherSettings}) => {
   
   // console.log(Object.keys(rowSelection).length == 0);
-  
+  const {darkMode} = useUIStore()
+  console.log(darkMode,colorTitle + '.contrastText');
+  let colorTittleContrast = (darkMode) ? colorTitle + '.contrastText' : colorTitle + '.main'
   const buttonGroup = <ButtonGroup            
-            color="secondary"
+            sx={(darkMode) ? {
+              'button': {color: 'buttons.contrastText',borderColor:'buttons.main'},
+              'button:hover': {color: 'buttons.contrastText',borderColor:'buttons.main',backgroundColor:'buttons.main'}
+            } : {
+              'button:hover': {backgroundColor:'primary.main',color:'primary.contrastText',borderColor:'primary.main'}
+            }}
           >
             <Button
               onClick={onAdd}
@@ -84,11 +92,11 @@ export const EditableGrid = ({loadState,buttonsPosition = 'start',pagination = [
 </ButtonGroup>
   
   return (
-    <Box sx={{marginBottom:spacing,display: "flex",flexDirection: "column"}}>
+    <Box className="editable-grid-box" sx={{marginBottom:spacing,display: "flex",flexDirection: "column"}}>
       {
         (title != '' && CRUDButtons == false) &&
         (<Divider sx={{ marginBottom: "10px", "::before": { borderColor: "primary.main" }, "::after": { borderColor: "primary.main" }}}>
-          <Typography fontSize={"22px"}>
+          <Typography sx={{color:colorTittleContrast}} fontSize={"22px"}>
               {title}
           </Typography>
         </Divider>)
@@ -98,13 +106,12 @@ export const EditableGrid = ({loadState,buttonsPosition = 'start',pagination = [
           display:"flex",
           justifyContent:(buttonsPosition === 'end') ? "center" : "space-between",
           alignItems:"center",
-          marginBottom:'30px'
         }}
       >
         {
           (title != "" && CRUDButtons) &&
             (
-              <Typography fontSize={"22px"}>
+              <Typography fontSize={"22px"} sx={{color:colorTittleContrast}}>
                 {title}
               </Typography>
             ) 
@@ -139,15 +146,21 @@ export const EditableGrid = ({loadState,buttonsPosition = 'start',pagination = [
         columns={columns}
         sx={{
             bgcolor:"background.info",
-            height:"80%",
             maxWidth:'168vh',
-            minHeight:'371px',
+            maxHeight:"400px",
+            minHeight: height,
+            marginTop:"20px",
             marginBottom:(buttonsPosition === "end") ? "20px" : "0px",
+            ".MuiDataGrid-footerContainer" : {
+              minHeight:"10px",
+              // height:"10px",
+            }
         }}
         // disableColumnMenu
-        
         disableMultipleRowSelection
         rowSelection={rowSelection}
+        columnHeaderHeight={36}
+        rowHeight={25}
         // rowSelectionModel={rowSelection}
         onRowSelectionModelChange={onSelection}
         disableRowSelectionExcludeModel

@@ -2,7 +2,7 @@
 import { Box } from '@mui/material'
 import PropTypes from 'prop-types'
 import { MenuButtons } from './MenuButtons';
-import { useAuthStore } from '../hooks';
+import { useAuthStore, useUIStore } from '../hooks';
 
 export const SideBar = ({drawerWith = 240,openMenu,menus = []}) => {
 
@@ -14,12 +14,13 @@ export const SideBar = ({drawerWith = 240,openMenu,menus = []}) => {
     menus = menus.filter(menu => menu.id != "usuarios")
   }
 
+  const {darkMode} = useUIStore();
   return (
     <Box
         component='nav'
         className='sideBar'
         sx={{
-          bgcolor:'white',
+          bgcolor: (darkMode) ? '#2d394b' : 'white',
           position: {xs:'fixed'},
           top:{xs:posTop,sm: '0px'},
           left:{xs:posLeft,sm:'0px'},
@@ -33,7 +34,7 @@ export const SideBar = ({drawerWith = 240,openMenu,menus = []}) => {
       >
         {
           menus.map((menu) => (
-            <MenuButtons key={menu.id} title={menu.title} id={menu.id}/>
+            <MenuButtons background={darkMode} color={darkMode ? 'white' : 'black'} key={menu.id} title={menu.title} id={menu.id}/>
           ))
         }
     </Box>

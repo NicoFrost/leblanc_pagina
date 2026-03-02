@@ -25,6 +25,7 @@ import {
 
 import { green } from '@mui/material/colors';
 import { DoubleInputTextField } from '../components/DoubleInputTextField';
+import { ModalLayout } from '../layout/ModalLayout';
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -201,7 +202,7 @@ export const EmployeeModal = ({initialForm = initialFormShape}) => {
 
   return (
     <Modal
-      open={isEmployeeModalOpen}
+      open={!!isEmployeeModalOpen}
       onClose={onClosingModal}
       style={{
         top: "50%",
@@ -212,20 +213,9 @@ export const EmployeeModal = ({initialForm = initialFormShape}) => {
       // overlayClassName='modal-fondo'
       // onAfterOpen={onOpen}
     >
-      <Box
-        sx={{
-          position: "absolute",
-          transform: "translate(-50%, -50%)",
-          width: 500,
-          bgcolor: "background.paper",
-          border: "2px solid #000",
-          borderRadius: "10px",
-          boxShadow: 24,
-          p: 4,
-        }}
-      >
+      <ModalLayout width={500}>
         {/* <h1>{(activeEmployee == undefined) ? "Nuevo Empleado/a" : "Editar Empleado/a" }</h1> */}
-        <h2 style={{ color: "black", fontSize: "40px", textAlign: "center" }}>
+        <h2 style={{ fontSize: "40px", textAlign: "center" }}>
           {(isEmployeeModalOpen != 'edit') ? "Nuevo Empleado/a" : "Editar empleado " + activeEmployee?.name}
         </h2>
         <Divider sx={{ marginY: "10px" }} />
@@ -355,7 +345,7 @@ export const EmployeeModal = ({initialForm = initialFormShape}) => {
               )}
             </Box>
         </Box>
-      </Box>
+      </ModalLayout>
     </Modal>
   );
 }

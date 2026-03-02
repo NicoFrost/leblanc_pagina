@@ -13,7 +13,7 @@ export const EmployeeView = () => {
   const {salaries,activeSalary,setActiveSalary, setSettleSalary} = useSalariesStore()
   const {employees} = useEmployeesStore()
   const {payments,startSavingPayment} = usePaymentsStore();
-  const {openSalaryModal} = useUIStore();
+  const {openSalaryModal,darkMode} = useUIStore();
 
   const [selection, setSelection] = React.useState({
     type: 'include', // or 'exclude'
@@ -95,11 +95,12 @@ export const EmployeeView = () => {
           rows={salaries}
           
           title='Sueldos'
+          colorTitle={'secondary'}
           CRUDButtons={false}
           rowSelection={true}
           checkboxSelection 
           disableRowSelectionOnClick
-
+          height="100px"
           onRowClick={handleClickInspect}
           isRowSelectable={(params) => params.row.paid == false}
 
@@ -125,7 +126,7 @@ export const EmployeeView = () => {
           // }}
       />
       <Divider sx={{margin:"10px 0 30px 0","::before": { borderColor: "primary.main" }, "::after": { borderColor: "primary.main" }}}>
-        <Typography variant='h5'>Pagos</Typography>
+        <Typography sx={{color:darkMode ? "secondary.contrastText" : "secondary.main" }} variant='h5'>Pagos</Typography>
       </Divider>
       <FormCollection
         formState={formState}

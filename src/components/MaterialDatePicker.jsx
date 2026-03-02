@@ -50,7 +50,7 @@ function ButtonDateField(props) {
     <Button
       {...forwardedProps}
       variant="outlined"
-      color={hasValidationError ? 'error' : 'primary'}
+      color={hasValidationError ? 'error' : 'buttons'}
       ref={handleRef}
       className={pickerContext.rootClassName}
       sx={pickerContext.rootSx}
@@ -65,7 +65,8 @@ function ButtonDateField(props) {
 function ButtonFieldDatePicker(props) {  
   return (
     <DatePicker 
-      {...props} slots={{ ...props.slots, field: ButtonDateField }} 
+      {...props} 
+      slots={{ ...props.slots, field: ButtonDateField }} 
       slotProps={{
         popper: {
           placement: 'bottom-end',

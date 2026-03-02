@@ -6,6 +6,14 @@ body {
   text-align: center; */
 }
 
+body.light-theme  {
+  background-color: #fff;
+}
+
+body.dark-theme {
+  background-color: #606060;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

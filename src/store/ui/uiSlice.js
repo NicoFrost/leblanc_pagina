@@ -11,7 +11,8 @@ const initialState = {
     isExpensesModalOpen: false,
     isInvoiceModalOpen: false,
     isDateModalOpen: false,
-    isUserModalOpen: false
+    isUserModalOpen: false,
+    darkMode: false
 };
 
 export const uiSlice = createSlice({
@@ -83,7 +84,10 @@ export const uiSlice = createSlice({
         },
         onCloseUserModal: (state,{payload}) => {
             state.isUserModalOpen = payload || false;
-        }   
+        },
+        onToggleDarkMode: (state,{payload}) => {
+            state.darkMode = payload;
+        }
     },
 });
 
@@ -125,4 +129,5 @@ export const {
     onOpenMethodModal,
     onCloseMethodModal,
 
+    onToggleDarkMode,
 } = uiSlice.actions;

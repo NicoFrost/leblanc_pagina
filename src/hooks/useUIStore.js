@@ -38,7 +38,7 @@ import {
     // Method
     onOpenMethodModal,
     onCloseMethodModal,
-
+    onToggleDarkMode,
 } from "../store/ui/uiSlice"
 import {
     useBuildingsStore,
@@ -63,6 +63,7 @@ export const useUIStore = () => {
         isSalaryModalOpen,
         isPaymentModalOpen,
         isMethodModalOpen,
+        darkMode
     } = useSelector(state => state.ui)
 
     const {setActiveBuilding} = useBuildingsStore()
@@ -250,7 +251,10 @@ export const useUIStore = () => {
     const closeUserModal = (isSelection) => {
         dispatch(onCloseUserModal(isSelection))
     }
-    
+
+    const toggleDarkMode = () => {
+        dispatch(onToggleDarkMode(!darkMode))
+    }
  
 
 
@@ -311,5 +315,8 @@ export const useUIStore = () => {
         isMethodModalOpen,
         openMethodModal,
         closeMethodModal,
+
+        darkMode,
+        toggleDarkMode
     }
 }

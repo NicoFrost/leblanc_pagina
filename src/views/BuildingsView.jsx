@@ -43,7 +43,7 @@ export const BuildingsView = () => {
       setActiveEmployee(val);
     }
   }
-    
+  
   return (
     <Box 
       sx={{display:"flex",flexDirection:"row",
@@ -56,11 +56,14 @@ export const BuildingsView = () => {
     >
       <Box sx={{width:"45%",height:"80vh"}}>
         <EditableGrid
+          colorTitle={'secondary'}
           title='Empleadas'
           collectionName="employees"
+
           onAdd={() => {openEmployeeModal()}}
           onEdit={() => {openEmployeeModal('edit')}}
           onDelete={startDeletingEmployee}
+          
           columns={employeeColumns}
           rows={employees}
           onSelection={({ids}) => handleSelection(ids,'employees')}
@@ -72,15 +75,17 @@ export const BuildingsView = () => {
       <Box sx={{width:"55%",height:"80vh"}}>
         <EditableGrid
           title="Buildings"
+          colorTitle={'secondary'}
           collectionName="buildings"
+
           onAdd={() => {setActiveBuilding(-1);
               openBuildingModal()
           }}
           onEdit={() => {openBuildingModal('edit')}}
           onDelete={startDeletingBuilding}
+          
           columns={buildingColumns}
           rows={buildings}
-
           onSelection={({ids}) => handleSelection(ids,'building')}
           rowSelection={activeBuilding}
 

@@ -5,6 +5,7 @@ import { Box, Button, FormControl, FormHelperText, InputLabel, MenuItem, Select,
 import { SketchPicker } from 'react-color';
 import CheckIcon from '@mui/icons-material/Check';
 import SaveIcon from '@mui/icons-material/Save';
+import { ModalLayout } from '../layout/ModalLayout';
 
 const initialFormShape = {method: '', color: '#ffffff'}
 export const MethodModal = () => {
@@ -52,7 +53,8 @@ export const MethodModal = () => {
         }}
     >
         <Box>
-            <Box
+            <ModalLayout offset='-100%'>
+            {/* <Box
                 sx={{
                     position: "absolute",   
                     transform: "translate(-100%, -50%)",
@@ -64,7 +66,7 @@ export const MethodModal = () => {
                     color:"black",  
                     p: 4,
                 }}
-            >
+            > */}
                 {/* <Box 
 
                     display={'flex'}
@@ -112,7 +114,7 @@ export const MethodModal = () => {
                     </Box>
 
                 {/* </Box> */}
-            </Box>
+            </ModalLayout>
         </Box>
     </Modal>
   )

@@ -162,12 +162,13 @@ export const useContractsStore = () => {
         const dataDB = await window.api.getContracts();
         
         
+        
         if(dataDB){
             const contractsDB = dataDB.map(contract => {
                 
                 const daySplitted = contract.dataValues.days.split(',');
                 const formattedDays = daySplitted.map(timeDay => timeDay.split('_')) 
-                            
+                
                 return {
                     ...contract.dataValues,
                     days: formattedDays,
@@ -176,6 +177,7 @@ export const useContractsStore = () => {
                 }
             });
             
+            console.log(contractsDB);
             dispatch(onLoadContracts(contractsDB));
         } else {
             throw new Error('No se pudieron cargar los contratos desde la base de datos');

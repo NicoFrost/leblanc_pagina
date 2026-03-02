@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { ButtonBase, Divider, Typography } from '@mui/material'
 import { useUIStore } from '../hooks';
 
-export const MenuButtons = ({title,id}) => {
+export const MenuButtons = ({title,id,background,color}) => {
   
   const {SwitchMenu,activeMenu} = useUIStore()
   
@@ -20,11 +20,11 @@ export const MenuButtons = ({title,id}) => {
     <>
       <ButtonBase
           sx={{paddingX:{xs:'10px',sm:'5px'},backgroundColor:(activeMenu == id) ? "#b6b6b6ff" : "",":first-of-type": {
-           background:"#42a1ff" 
+           background: (background) ? "#42a1ff" : "#1470da", 
           },boxSizing:"border-box",height:"65px",width:'100%',justifyContent:'center'}}
           onClick={onOptionChange}
       > 
-          <Typography id={id} sx={{paddingY:'10px'}} variant='h5' color='black'>{title}</Typography>
+          <Typography id={id} sx={{paddingY:'10px',color:color}} variant='h5'>{title}</Typography>
           {/* en este lugar iria a modificiar o eliminar ordenes de compra ya realizadas */}
       </ButtonBase>
       <Divider/>

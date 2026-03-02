@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Alert, Box, Snackbar } from "@mui/material"
+import { Alert, Box, createTheme, Snackbar, ThemeProvider } from "@mui/material"
 import PropTypes from 'prop-types';
 // import { motion } from "framer-motion";
 
@@ -78,12 +78,38 @@ export const MenuLayout = ({children}) => {
     setOpen(false);
   };
 
+  const customTheme = createTheme({
+    palette: {
+      dark: {
+        main: '#606060',
+        contrastText: '#fff',
+      },
+      light: {
+        main: '#fff',
+        contrastText: '#000',
+      },
+      primary: {
+        main: '#1470da',
+        contrastText: '#fff',
+      },
+      secondary: {
+        main: '#10345d',
+        contrastText: '#fff',
+      },
+      buttons: {
+        main: '#2e274a',
+        contrastText: '#fff',
+      },
+    },
+  });
   return (
     // <motion.div
     //   initial={{opacity:0,transition: {duration: 1}}}
     //   animate={{opacity: 1,transition: {duration:1 }}}
     //   exit={{opacity: 0,transition: {duration: 1}}}
     // >
+    <ThemeProvider theme={customTheme}>
+
       <SnackbarProvider maxSnack={5}>
         <Box 
           sx={{
@@ -123,6 +149,7 @@ export const MenuLayout = ({children}) => {
           />
         </Box>
       </SnackbarProvider>
+    </ThemeProvider>
     // </motion.div>
   )
 }

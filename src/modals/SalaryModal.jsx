@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useMethodStore, usePaymentsStore, useSalariesStore, useUIStore } from '../hooks'
 import { Box, Divider, List, ListItemButton, ListItemText, ListSubheader, Modal, Typography } from '@mui/material'
+import { ModalLayout } from '../layout/ModalLayout'
 
     export const SalaryModal = () => {
 
@@ -43,26 +44,18 @@ import { Box, Divider, List, ListItemButton, ListItemText, ListSubheader, Modal,
             }}
         >
             <Box>
-                <Box
-                    sx={{
-                        position: "absolute",   
-                        transform: "translate(-100%, -50%)",
-                        width: 500,
-                        bgcolor: "background.paper",
-                        border: "2px solid #000",
-                        borderRadius: "10px",
-                        boxShadow: 24,
-                        color:"black",  
-                        p: 4,
-                    }}
-                >
+                <ModalLayout offset='-100%' width={500}>
                     {/* <h1>{(activeEmployee == undefined) ? "Nuevo Empleado/a" : "Editar Empleado/a" }</h1> */}
                     <h2 style={{ color: "black", fontSize: "20px", textAlign: "center" }}>
                         Detalles de Sueldo {(activeSalary) ? activeSalary.id : ''}
                     </h2>
                     <Divider sx={{ marginY: "10px" }} />
                     <Box>
-                        <Typography>{activeSalary?.grossAmount}</Typography>
+                        <Box display={"flex"} justifyContent={"space-around"}>
+                            <Typography>Monto a pagar: {activeSalary?.grossAmount}</Typography>
+                            <Typography>Fecha: {activeSalary?.date?.format('dddd DD/MM')}</Typography>
+                            <Typography>Período: {activeSalary?.period}</Typography>
+                        </Box>
                         <List>
                             <ListSubheader sx={{color:"black",fontWeight:800,fontSize:"20px"}}>Pagos</ListSubheader>
                             {
@@ -94,38 +87,30 @@ import { Box, Divider, List, ListItemButton, ListItemText, ListSubheader, Modal,
                             })
                             }
                         </List>
+                        <Typography>Monto Remanente: {activeSalary?.grossAmount - (payments?.filter(p => p.salaryId == activeSalary?.id)?.reduce((sum, p) => sum + p.amount, 0) || 0)}</Typography>
                         <ListSubheader sx={{color:"black",fontWeight:800,fontSize:"20px",marginTop:"20px"}}>Referencia de Métodos</ListSubheader>
-                        <Box display={'flex'}>
+                        <Box display={'flex'} flexWrap={"wrap"}>
                             {
                                 methods?.filter(m => m.color).map((method) => (
                                     <Box key={method.id} sx={{display:"flex",alignItems:"center",padding:"8px",gap:"10px"}}>
                                         <Box sx={{width:"20px",height:"20px",backgroundColor:method.color,borderRadius:"3px"}}/>
-                                        <Typography sx={{fontSize:"14px"}}>{method.name}</Typography>
+                                        <Typography sx={{fontSize:"14px"}}>{method.name ? method.name : method.type[0].toUpperCase() + method.type.slice(1)}</Typography>
                                     </Box>
                                 ))
                             }
                         </Box>
 
                     </Box>
-                </Box>
-                <Box
-                    sx={{
-                        // position: "absolute",
-                        transform: "translate(10%, -50%)",
-                        width: 500,
-                        bgcolor: "background.paper",
-                        border: "2px solid #000",
-                        borderRadius: "10px",
-                        boxShadow: 24,
-                        color:"black",
-                        p: 4,
-                    }}
+                </ModalLayout>
+                <ModalLayout
+                    offset='10%'
+                    width={500}
                 >
-                    <img width={"100%"} height={"600px"} 
+                    <img width={"100%"} height={"100%"}
                         src={(selectedIndex.imageURL) ? selectedIndex.imageURL : "https://res.cloudinary.com/du7nakzdh/image/upload/v1763524852/leblanc/no-image_j12lcb.jpg"}
                         // src={}
                     />
-                </Box>
+                </ModalLayout>
         </Box>
         </Modal>
   )

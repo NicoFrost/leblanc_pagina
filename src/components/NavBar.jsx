@@ -3,18 +3,21 @@ import { AppBar, Box, Button, Grid, IconButton, Toolbar, Typography } from "@mui
 // import { useAuthStore } from "../../hooks/useAuthStore"
 import { Event, LogoutOutlined, MenuOutlined } from "@mui/icons-material";
 import LanguageIcon from '@mui/icons-material/Language';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import PropTypes from 'prop-types'
-import { useAuthStore } from "../hooks";
+import { useAuthStore, useUIStore } from "../hooks";
 //  TODO INSTALAR SWEET ALERTS 2
 // import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 
 let menuOpen = 0;
 export const NavBar = ({handleLiquidationOpen,setOpenMenu,drawerWidth}) => {
 
     const {user,startLogout} = useAuthStore();
-
+    const {darkMode,toggleDarkMode} = useUIStore()
     let UserModified;
 
     if(typeof user.name == "string"){
@@ -33,20 +36,10 @@ export const NavBar = ({handleLiquidationOpen,setOpenMenu,drawerWidth}) => {
     // const {startLogout} = useAuthStore();
 
     const onLogout = () => {
-        Swal.fire({
-            title:"Esta seguro de salir?",
-            icon:"info",
-            showDenyButton:true,
-            showConfirmButton:true,
-            confirmButtonText: "Si, quiero salir",
-            denyButtonText:"No, quiero quedarme"
-        }).then(async (result) => {
-            if(result.isConfirmed){
-                startLogout(); 
-            }
-        })
-   
-        // console.log("SALIENDO!");
+        // Select the button
+        toggleDarkMode()
+        // Then toggle (add/remove) the .dark-theme class to the body
+        document.body.classList.toggle('dark-theme');  
     }
 
   return (
@@ -94,8 +87,9 @@ export const NavBar = ({handleLiquidationOpen,setOpenMenu,drawerWidth}) => {
                         color="error"
                         onClick={onLogout}
                         aria-label="Logout"
+                        sx={{marginLeft:2}}
                     >
-                        <LogoutOutlined/>
+                        {darkMode === false ? <LightModeIcon sx={{color:"white"}}/> : <DarkModeIcon sx={{color:"black"}}/>}
                     </IconButton>
                 </Box>
 
