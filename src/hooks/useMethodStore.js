@@ -31,12 +31,18 @@ export const useMethodStore = () => {
                 dispatch(onUpdateMethod(methodData));
                 if(dataDB.msg) data = {msg: dataDB.msg,helpMsg: dataDB.helpMsg}
             } else {
+
+                console.log(methodData);
+                
                 const {success,msg,helpMsg,method:dataDB} = await window.api.createMethod({
-                    ...methodData
+                    ...methodData,
+                    name: methodData.method
                 });
 
+                console.log(dataDB);
+                
                 const method = {
-                    ...dataDB
+                    ...dataDB.dataValues
                 };
 
                 if(success) {

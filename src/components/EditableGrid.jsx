@@ -61,7 +61,7 @@ const ExampleRow = [
 
 
 
-export const EditableGrid = ({height = "250px",mTop = "0px",colorTitle,loadState,buttonsPosition = 'start',pagination = [5,25,100,240],children,rowSelection = false,onSelection,onAdd,onEdit,onDelete,rows = ExampleRow,columns = ExampleColumn,activeElement = {},CRUDButtons = true,ActiveAndInactiveSelect = false,slots,title = "",spacing = "0px",...otherSettings}) => {
+export const EditableGrid = ({dataStyle,height = "250px",mTop = "0px",colorTitle,loadState,buttonsPosition = 'start',pagination = [5,25,100,240],children,rowSelection = false,onSelection,onAdd,onEdit,onDelete,rows = ExampleRow,columns = ExampleColumn,activeElement = {},CRUDButtons = true,ActiveAndInactiveSelect = false,slots,title = "",spacing = "0px",...otherSettings}) => {
   
   // console.log(Object.keys(rowSelection).length == 0);
   const {darkMode} = useUIStore()
@@ -154,7 +154,8 @@ export const EditableGrid = ({height = "250px",mTop = "0px",colorTitle,loadState
             ".MuiDataGrid-footerContainer" : {
               minHeight:"10px",
               // height:"10px",
-            }
+            },
+            ...dataStyle
         }}
         // disableColumnMenu
         disableMultipleRowSelection

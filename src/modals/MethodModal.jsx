@@ -34,14 +34,13 @@ export const MethodModal = () => {
 
     const onSubmit = async (event) => {
         event.preventDefault()
-        console.log(formState);
+        // console.log(formState);
         setFormSubmitted(true);
         setTimeout(() => {
             setFormSubmitted(false);
             startSavingMethod(formState)
-            closeMethodModal()
         }, 3000);
-
+        closeMethodModal()
     }
     return (
     <Modal
@@ -109,6 +108,7 @@ export const MethodModal = () => {
                             type="submit"
                             variant="contained"
                             color="success"
+                            onClick={onSubmit}
                             sx={{width: "100%", height:"35px", marginTop:"20px"}}
                         >Guardar</Button>
                     </Box>

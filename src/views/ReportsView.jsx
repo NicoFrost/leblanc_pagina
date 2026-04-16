@@ -86,36 +86,39 @@ export const ReportsView = () => {
   // const handleAlertClose = () => {  
   //   setAlertOpen(false)
   // }  
-  console.log(darkMode);
+  console.log(formState);
   
   return (
-    <Box sx={{width:"85vw",display:"flex",justifyContent:"center"}}>
-      <Box>
-      <EditableGrid
-          mTop="20px"
-          columns={invoiceColumn}
-          rows={invoices.filter(i => i.state === true)}
-          colorTitle={'secondary'}
-          title='Facturas'
-          CRUDButtons={false}
-          onRowClick={handleClickInspect}
-          isRowSelectable={(params) => params.row.settled == false}
-          checkboxSelection 
-          onSelection={(ids) => setSelection(ids)}
-          rowSelection={selection}
-          disableRowSelectionOnClick
-          height="100px"
-      />
-      <Divider sx={{margin:"10px 0 30px 0","::before": { borderColor: "primary.main" }, "::after": { borderColor: "primary.main" }}}>
-        <Typography sx={{color:(darkMode) ? 'secondary.contrastText' : 'secondary.main' }} variant='h5'>Cobranzas</Typography>
-      </Divider>
-      <FormCollection
-        formState={formState}
-        onInputChange={onInputChange}
-        onAdd={onAddCollection}
-        onReset={onResetForm}
-      />
-      </Box>
+    <Box sx={{display:"flex",justifyContent:"center",
+      marginLeft:{xs:"10px",sm:"5px",lg:"20px"},
+      width:{xs:"85vw",sm:"54vw",md:"75vw",xl:"80vw"},
+    }}>
+      <Box width={"100%"}>
+        <EditableGrid
+            mTop="20px"
+            columns={invoiceColumn}
+            rows={invoices.filter(i => i.state === true)}
+            colorTitle={'secondary'}
+            title='Facturas'
+            CRUDButtons={false}
+            onRowClick={handleClickInspect}
+            isRowSelectable={(params) => params.row.settled == false}
+            checkboxSelection 
+            onSelection={(ids) => setSelection(ids)}
+            rowSelection={selection}
+            disableRowSelectionOnClick
+            height="100px"
+        />
+        <Divider sx={{margin:"10px 0 30px 0","::before": { borderColor: "primary.main" }, "::after": { borderColor: "primary.main" }}}>
+          <Typography sx={{color:(darkMode) ? 'secondary.contrastText' : 'secondary.main' }} variant='h5'>Cobranzas</Typography>
+        </Divider>
+        <FormCollection
+          formState={formState}
+          onInputChange={onInputChange}
+          onAdd={onAddCollection}
+          onReset={onResetForm}
+        />
+        </Box>
     </Box>
   )
 }

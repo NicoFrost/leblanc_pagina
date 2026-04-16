@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, InputBase, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import { Box, Button, FormControl, InputBase, InputLabel, MenuItem, OutlinedInput, Select, TextField } from '@mui/material'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 import MaterialDatePicker from './MaterialDatePicker'
@@ -34,24 +34,7 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 
-
-
-
-export const FormCollection = ({onInputChange,formState,onAdd,onReset,formType}) => {
-
-    const {methods} = useMethodStore();
-    const {darkMode} = useUIStore();
-    const HandlerSubmit = async (e) => {
-        e.preventDefault()
-        // console.log((formState.imageURL) ? formState.imageURL[0] : []);
-        console.log(formState);
-        
-        const respuesta = await fileUpload((formState.imageURL) ? formState.imageURL[0] : [])
-        onAdd({...formState,amount: parseFloat(formState.amount),imageURL: respuesta?.url})
-        onReset()
-    }
-
-    const CssTextField = styled(TextField)({
+    const CssTextField = styled(TextField)(({ darkMode }) => ({
         backgroundColor: 'background.paper',
         '&  label.Mui-focused': {
             color: (darkMode) ? '#ffffff' : '#000000',
@@ -77,43 +60,104 @@ export const FormCollection = ({onInputChange,formState,onAdd,onReset,formType})
         "& .MuiInputLabel-root": {
             color: (darkMode) ? '#ffffff' : 'rgba(0, 0, 0, 0.6)',
         }
-    });
-
-    const BootstrapInput = styled(InputBase)(({ theme }) => ({
-    'label + &': {
-        color: (darkMode) ? '#ffffff' : '#000000',
-    },
-    "& .MuiInputLabel-root": {
-        color: (darkMode) ? '#ffffff' : 'rgba(0, 0, 0, 0.6)',
-    },
-
-    '& .MuiInputBase-input': {
-        paddingTop: "12%",
-        borderRadius: 4,
-        position: 'relative',
-        backgroundColor: (darkMode) ? 'grey' : '#fafafa',
-        border: '1px solid #8e8e8e',
-        fontSize: 16,
-        // padding: '10px 26px 10px 12px',
-        transition: theme.transitions.create(['border-color', 'box-shadow']),
-        '&:focus': {
-            borderRadius: 4,
-            borderColor: '#80bdff',
-            boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
-        },
-    },
     }));
+
+
+    const BootstrapInput = styled(InputBase)(({ theme,darkMode }) => ({
+        'label + &': {
+            color: (darkMode) ? '#ffffff' : '#000000',
+        },
+        "& .MuiInputLabel-root": {
+            color: (darkMode) ? '#ffffff' : 'rgba(0, 0, 0, 0.6)',
+        },
+        '& .MuiSelect-select':{
+            alignItems: "center",
+        },
+        '& .MuiInputBase-input': {
+            borderRadius: 4,
+            height: "100%",
+            position: 'relative',
+            backgroundColor: (darkMode) ? 'grey' : '#fafafa',
+            border: '1px solid #8e8e8e',
+            fontSize: 16,
+            // padding: '10px 26px 10px 12px',
+            transition: theme.transitions.create(['border-color', 'box-shadow']),
+            '&:focus': {
+                borderRadius: 4,
+                borderColor: '#80bdff',
+                boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+            },
+        },
+    }));
+
+    const BootstrapOutlined = styled(OutlinedInput)(({ theme,darkMode}) => ({
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#8e8e8e',
+            backgroundColor: darkMode ? 'grey' : '#fafafa'
+        },
+        '& .MuiOutlinedInput-input': {
+            borderRadius: 4,
+            padding: '10px 12px',
+            color: darkMode ? '#fff' : '#000'
+        },
+        '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#b5b5b5'
+        },
+        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: (darkMode) ? '#6e227f' : '#80bdff',
+        }
+    }));
+
+export const FormCollection = ({onInputChange,formState,onAdd,onReset,formType}) => {
+
+    const {methods} = useMethodStore();
+    const {darkMode} = useUIStore();
+    const HandlerSubmit = async (e) => {
+        e.preventDefault()
+        // console.log((formState.imageURL) ? formState.imageURL[0] : []);
+        console.log(formState);
+        
+        const respuesta = await fileUpload((formState.imageURL) ? formState.imageURL[0] : [])
+        onAdd({...formState,amount: parseFloat(formState.amount),imageURL: respuesta?.url})
+        onReset()
+    }
 
     return (
     <Box component={"form"} onSubmit={HandlerSubmit}>
         <Box display={"flex"} justifyContent={'space-between'} width={"100%"} marginBottom={"10px"}>
             {
                 formType === 'payment' ?  
-                <Box sx={{width:"60%",display:"flex",justifyContent:"space-between"}}>
-                    <CssTextField label="Importe" name='amount' sx={{width:"60%",marginRight:"10px"}} onChange={onInputChange} value={formState.amount}/>
-                    <FormControl  fullWidth sx={{width:"40%"}}>
-                        <InputLabel sx={{color:"white"}} id="type-label">Tipo de pago</InputLabel>
-                        <Select input={<BootstrapInput/>} id='type-label' label='Tipo de pago' name='type' value={formState.type} onChange={onInputChange} >
+                <Box sx={{width:{xs:"60%"},display:"flex",justifyContent:"space-between"}}>
+                    <CssTextField label="Importe" name='amount' 
+                        sx={{width:"60%",marginRight:"10px"}} 
+                        darkMode={darkMode}
+                        onChange={onInputChange} 
+                        value={formState.amount}
+                    />
+                    <FormControl sx={{width:"40%",height:"56px",justifyContent:"center"}} id='type-label'>
+                        <InputLabel sx={{
+                            color: darkMode ? '#fff' : 'rgba(0,0,0,0.6)',
+                            '&.Mui-focused': {
+                                color: darkMode ? '#80bdff' : 'rgb(0, 149, 255)'
+                            }
+                        }} 
+                        id="type-label">Tipo de pago</InputLabel>
+                        <Select
+                            labelId="type-label"
+                            // variant="outlined"
+                            input={<BootstrapInput darkMode={darkMode} label="Tipo de pago" />}
+                            label="Tipo de pago"
+                            value={formState.type}
+                            onChange={onInputChange}
+                            name='type'
+                            sx={{
+                                height: "56px",
+                                ".MuiSelect-select": {
+                                    boxSizing: "border-box",
+                                    padding: { sm: "10px 10px", lg: "15px 10px" }
+                                },
+                            }}
+                        >
                             <MenuItem value='advance'>Adelanto</MenuItem>
                             <MenuItem value='full'>Completo</MenuItem>
                             <MenuItem value='partial'>Parcial</MenuItem>
@@ -121,7 +165,7 @@ export const FormCollection = ({onInputChange,formState,onAdd,onReset,formType})
                     </FormControl>
                 </Box>
                 :
-                <CssTextField label="Importe" sx={{width:"60%"}} name='amount' onChange={onInputChange} value={formState.amount}/>
+                <CssTextField darkMode={darkMode} label="Importe" sx={{width:"60%"}} name='amount' onChange={onInputChange} value={formState.amount}/>
             }
             <Box display={"flex"} sx={{justifyContent:"space-around"}} width={"40%"}>
                 <Button 

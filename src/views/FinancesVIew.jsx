@@ -61,14 +61,17 @@ export const FinancesView = () => {
   return (
     <Box sx={{
       display:"flex",
-      flexDirection:"row",
+      flexDirection:{xs:"column",sm:"row",},
       gap:"20px",
-      width:"80vw",
-      marginLeft:"40px",
-      marginTop:"20px",
-      justifyContent:"center"
+      width:{xs:"80vw",sm:"73vw",xl:"80vw"},
+      marginLeft:{xs:"10px",sm:"5px",lg:"20px"},
+      marginTop:{xs:"40px",sm:"40px"},  
+      justifyContent:"center",
+      // overflowY:"auto",
+      overflowX:"hidden",
+      paddingBottom:"20px"
     }}>
-      <Box sx={{width:"60%",height:"80vh"}}>
+      <Box sx={{width:{xs:"100%",sm:"45%"}}}>
         <EditableGrid
           title='Contratos'
           collectionName="contracts"
@@ -88,7 +91,7 @@ export const FinancesView = () => {
           spacing='20px'
         />
       </Box>
-      <Box sx={{width:"40%",height:"80vh"}}>
+      <Box sx={{width:{xs:"100%",sm:"45%"}}}>
         <EditableGrid
           title='Gastos'
           collectionName="expenses"

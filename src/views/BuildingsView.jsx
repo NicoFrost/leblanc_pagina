@@ -46,15 +46,20 @@ export const BuildingsView = () => {
   
   return (
     <Box 
-      sx={{display:"flex",flexDirection:"row",
+      sx={{
+        display:"flex",
+        flexDirection:{xs:"column",sm:"row",},
         gap:"20px",
-        width:"80vw",
-        marginLeft:"40px",
-        marginTop:"20px",
-        justifyContent:"center"
+        width:{xs:"80vw",sm:"73vw",xl:"80vw"},
+        marginLeft:{xs:"10px",sm:"5px",lg:"20px"},
+        marginTop:{xs:"40px",sm:"-40px"},  
+        justifyContent:"center",
+        // overflowY:"scroll",
+        overflowX:"hidden",
+        paddingBottom:"20px"
       }}
     >
-      <Box sx={{width:"45%",height:"80vh"}}>
+      <Box sx={{width:{xs:"100%",sm:"45%"}}}>
         <EditableGrid
           colorTitle={'secondary'}
           title='Empleadas'
@@ -72,7 +77,7 @@ export const BuildingsView = () => {
           buttonsPosition='end'
         />
       </Box>
-      <Box sx={{width:"55%",height:"80vh"}}>
+      <Box sx={{width:{xs:"100%",sm:"45%"}}}>
         <EditableGrid
           title="Buildings"
           colorTitle={'secondary'}

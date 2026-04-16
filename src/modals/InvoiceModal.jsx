@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useCollectionStore, useInvoiceStore, useUIStore } from '../hooks'
-import { Box, Divider, List, ListItemButton, ListItemText, ListSubheader, Modal, Typography } from '@mui/material'
+import { Box, Divider, List, ListItemButton, ListItemText, ListSubheader, Modal, Tooltip, Typography } from '@mui/material'
 import { useMethodStore } from '../hooks/useMethodStore'
 import { ModalLayout } from '../layout/ModalLayout'
 
@@ -70,13 +70,15 @@ export const InvoiceModal = () => {
                             }
                         </List>
                         <ListSubheader sx={{color:"black",fontWeight:800,fontSize:"20px",marginTop:"20px"}}>Referencia de Métodos</ListSubheader>
-                        <Box display={'flex'}>
+                        <Box sx={{display:"flex",marginTop:"10px",flexDirection:"row",flexWrap:"wrap"}}>
                             {
                                 methods?.filter(m => m.color).map((method) => (
-                                    <Box key={method.id} sx={{display:"flex",alignItems:"center",padding:"8px",gap:"10px"}}>
-                                        <Box sx={{width:"20px",height:"20px",backgroundColor:method.color,borderRadius:"3px"}}/>
-                                        <Typography sx={{fontSize:"14px"}}>{method.name}</Typography>
-                                    </Box>
+                                    <Tooltip key={method.id} describeChild arrow title={method.type[0].toUpperCase() + method.type.slice(1)}>
+                                        <Box sx={{display:"flex",alignItems:"center",padding:"8px",gap:"10px"}}>
+                                            <Box sx={{width:"20px",height:"20px",backgroundColor:method.color,borderRadius:"3px"}}/>
+                                            <Typography sx={{fontSize:"14px"}}>{method.name || method.type[0].toUpperCase() + method.type.slice(1)}</Typography>
+                                        </Box>
+                                    </Tooltip>
                                 ))
                             }
                         </Box>

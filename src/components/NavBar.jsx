@@ -68,6 +68,7 @@ export const NavBar = ({handleLiquidationOpen,setOpenMenu,drawerWidth}) => {
                 width={"100%"}
             >
                 <Typography variant="h6" noWrap component='div'>{UserModified}</Typography>
+                <Typography variant="body1" id="message">Checking Update...</Typography>
                 <Box>
                     <Button onClick={handleLiquidationOpen}
                         variant='contained' 

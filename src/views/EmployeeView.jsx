@@ -87,10 +87,13 @@ export const EmployeeView = () => {
   }
   
   return (
-    <Box sx={{width:"85vw",display:"flex",justifyContent:"center"}}>
-      <Box>
-        
-      <EditableGrid
+    <Box sx={{
+      display:"flex",justifyContent:"center",
+      marginLeft:{xs:"10px",sm:"5px",lg:"20px"},
+      width:{xs:"85vw",sm:"54vw",md:"75vw",xl:"80vw"},
+    }}>
+      <Box width={"100%"}>
+        <EditableGrid
           columns={salariesColumn}
           rows={salaries}
           
@@ -101,6 +104,9 @@ export const EmployeeView = () => {
           checkboxSelection 
           disableRowSelectionOnClick
           height="100px"
+          dataStyle={{
+            maxWidth:"100%",
+          }}
           onRowClick={handleClickInspect}
           isRowSelectable={(params) => params.row.paid == false}
 
@@ -124,7 +130,7 @@ export const EmployeeView = () => {
           //     ids: new Set([ids.values().next().value]),
           //   })
           // }}
-      />
+        />
       <Divider sx={{margin:"10px 0 30px 0","::before": { borderColor: "primary.main" }, "::after": { borderColor: "primary.main" }}}>
         <Typography sx={{color:darkMode ? "secondary.contrastText" : "secondary.main" }} variant='h5'>Pagos</Typography>
       </Divider>

@@ -409,7 +409,7 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
                             <FormControl className='form-selectors'>
                                 <InputLabel id="employee-label">Empleado</InputLabel>
                                 <Select
-                                    sx={{".MuiSelect-select": {height: {sm:"20px",lg:"56px"},padding:{sm:"10px 10px",lg:"10px"}}}} 
+                                    sx={{height: {sm:"20px",lg:"56px"},".MuiSelect-select": {padding:{sm:"10px 10px",lg:"10px"}}}} 
                                     value={formState.employeeId}
                                     label="Empleado"
                                     name='employee' 
@@ -434,7 +434,7 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
                             <FormControl className='form-selectors'>
                                 <InputLabel id='building-label'>Edificio</InputLabel>
                                 <Select
-                                    sx={{".MuiSelect-select": {height: {sm:"20px",lg:"56px"},padding:{sm:"10px 10px",lg:"10px"}}}} 
+                                    sx={{height: {sm:"20px",lg:"56px"},".MuiSelect-select": {padding:{sm:"10px 10px",lg:"10px"}}}} 
                                     value={formState.buildingId}
                                     label="Edificio"
                                     name='building'
