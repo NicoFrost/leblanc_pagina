@@ -40,6 +40,7 @@ export const FinancesView = () => {
   ]
   
   const contractColumns = [
+    { field: 'id', headerName: 'ID', width: 70},
     { field: 'buildingId', headerName: 'Edificio', width: 120,valueGetter: (value,row) => {
       const building = getBuildingByID(row.buildingId)
       return building?.buildingName || ''

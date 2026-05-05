@@ -65,7 +65,7 @@ export const EditableGrid = ({dataStyle,height = "250px",mTop = "0px",colorTitle
   
   // console.log(Object.keys(rowSelection).length == 0);
   const {darkMode} = useUIStore()
-  console.log(darkMode,colorTitle + '.contrastText');
+  // console.log(darkMode,colorTitle + '.contrastText');
   let colorTittleContrast = (darkMode) ? colorTitle + '.contrastText' : colorTitle + '.main'
   const buttonGroup = <ButtonGroup            
             sx={(darkMode) ? {

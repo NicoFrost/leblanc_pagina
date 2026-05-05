@@ -58,9 +58,24 @@ export const useCalendarStore = () => {
 
   const startLoadingEvents = async () => {
     try {      
-      const events = contracts.flatMap((c) => generateEventsForContract(c, getEmployeeById, getBuildingByID))
+
+      const response = await fetch('https://api.argentinadatos.com/v1/feriados/2026');
+      const feriados = await response.json();
       
-      dispatch(onLoadEvents(events));
+      const events = contracts.flatMap((c) => generateEventsForContract(c, getEmployeeById, getBuildingByID))
+      const eventsWithFeriados = convertEventsToDateEvents(events).concat(
+        feriados.map(f => ({
+          id: `feriado-${dayjs(f.fecha).format('YYYYMMDD')}`,
+          title: f.nombre,
+          start: dayjs(f.fecha).startOf('day').toDate(),
+          end: dayjs(f.fecha).endOf('day').toDate(),
+          notes: 'Feriado Nacional',
+          contractId: null
+        }))
+      );
+      // console.log(eventsWithFeriados);
+      
+      dispatch(onLoadEvents(eventsWithFeriados));
       
     } catch (error) {
       console.log({msg: 'Error cargando evento',error});

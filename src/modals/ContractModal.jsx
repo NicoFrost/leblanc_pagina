@@ -304,7 +304,7 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
         });
     }
 
-    console.log(formState);
+    // console.log(formState);
     
 
     return (
@@ -322,10 +322,10 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
                     {/* <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es"> */}
                     {/* <h1>{(activeEmployee == undefined) ? "Nuevo Empleado/a" : "Editar Empleado/a" }</h1> */}
                     <h2 style={{margin:"0px"}}>CONTRATO</h2>
-                    <h2 style={{fontWeight:"normal",margin:"0px",marginBottom:{sm:"15px",lg:"30px"}}}>
+                    <h2 style={{fontWeight:"normal",margin:"0px",marginBottom:{sm:"5px",lg:"30px"}}}>
                         {(isContractModalOpen != 'edit' && isContractModalOpen != 'readonly') ? "Nuevo Contrato" : getBuildingByID(activeContract?.buildingId)?.buildingName}
                     </h2>
-                    <Box sx={{display:"flex",justifyContent:"space-around",mt:{sm:"15px",lg:"30px"}}}>
+                    <Box sx={{display:"flex",justifyContent:"space-around",mt:{sm:"5px",lg:"5px"}}}>
                         {["L","M","X","J","V","S"].map(day => (
                             (isContractModalOpen !== 'readonly') &&
                                 <FormControlLabel
@@ -458,7 +458,7 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
                     </Box>
                     <Box sx={{display:"flex",justifyContent:"center",mt:4}}>
                         {(isContractModalOpen !== 'readonly') &&
-                        <Button disabled={formSubmitted} variant='contained' sx={{width:"170px",height:"40px"}} color='success' type='submit' form={"contract-form"}>
+                        <Button onClick={onSubmit} disabled={formSubmitted} variant='contained' sx={{width:"170px",height:"40px"}} color='success' type='submit' form={"contract-form"}>
                             {
                                 formSubmitted ?                           
                                 <CircularProgress

@@ -18,12 +18,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { onActiveEmployee, onAddEmployee, onDeleteEmployee, onLoadEmployees, onUpdateEmployee } from "../store";
 import Swal from "sweetalert2";
 import { employeeRows } from "../helpers/getDataExample";
+import { useContractsStore } from "./useContractStore";
 
 
 export const useEmployeesStore = () => {
     // Aquí puedes implementar la lógica para interactuar con el store de empleados
 
     const {activeEmployee,employees} = useSelector(state => state.employee);
+    const {contracts} = useSelector(state => state.contract);
     // const {status} = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
@@ -49,7 +51,7 @@ export const useEmployeesStore = () => {
         try {
             if(employeeData.id){
                 // const dataDB = undefined;
-                // const {data: dataDB} = await formApi.put('/employee/' + employeeData.id, employeeData);
+                
                 const {msg,helpMsg,success} = await window.api.updateEmployee(employeeData.id, {
                     ...employeeData,
                     lastname: employeeData.lastName,
@@ -57,12 +59,13 @@ export const useEmployeesStore = () => {
                     phone: employeeData.phone.join(" ")
                 });
                 
-                dispatch(onUpdateEmployee(employeeData));
 
+                
                 if(success) data = {msg, helpMsg}
+                dispatch(onUpdateEmployee(employeeData));
             } else {
                 // const dataDB = undefined;
-                // const {status,data: dataDB} = await formApi.post('/employee', employeeData);
+
                 const {msg,helpMsg,success,employee:dataDB} = await window.api.createEmployee({
                     ...employeeData,
                     lastname: employeeData.lastName,
@@ -107,10 +110,14 @@ export const useEmployeesStore = () => {
             denyButtonColor: "grey",
             }).then(async (result) => {
                 if(result.isConfirmed) {
-                    // const data = await formApi.delete('/employee/' + activeEmployee.id)
                     const data = await window.api.deleteEmployee(activeEmployee.id);
                     dispatch(onDeleteEmployee());
-                    Swal.fire({
+                    contracts.find(c => c.employeeId === activeEmployee.id) ? Swal.fire({
+                        title: "Contrato/s sin Empleado",
+                        html: contracts.map(c => c.employeeId === activeEmployee.id ? `<p style="font-size: 14px;margin: 2px 0;">Contrato ${c.id} en edificio ${c.buildingId}</p>` : null).filter(Boolean).join(""),
+                        icon: 'warning',
+                        showCloseButton: true,
+                    }) : Swal.fire({
                         title: data.msg,
                         text: data.helpMsg,
                         icon: 'success',
