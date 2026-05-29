@@ -1,5 +1,5 @@
 // import { LogoutOutlined, MenuOutlined } from "@mui/icons-material"
-import { AppBar, Box, Button, Grid, IconButton, Toolbar, Typography } from "@mui/material"
+import { AppBar, Box, Button, CircularProgress, Grid, IconButton, Toolbar, Tooltip, Typography } from "@mui/material"
 // import { useAuthStore } from "../../hooks/useAuthStore"
 import { Event, LogoutOutlined, MenuOutlined } from "@mui/icons-material";
 import LanguageIcon from '@mui/icons-material/Language';
@@ -10,8 +10,9 @@ import { useAuthStore, useUIStore } from "../hooks";
 //  TODO INSTALAR SWEET ALERTS 2
 // import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import BrowserUpdatedIcon from '@mui/icons-material/BrowserUpdated';
 
 let menuOpen = 0;
 export const NavBar = ({handleLiquidationOpen,setOpenMenu,drawerWidth}) => {
@@ -41,7 +42,23 @@ export const NavBar = ({handleLiquidationOpen,setOpenMenu,drawerWidth}) => {
         // Then toggle (add/remove) the .dark-theme class to the body
         document.body.classList.toggle('dark-theme');  
     }
+    const [statusUpdate, setStatusUpdate] = useState('null')
 
+    useEffect(() => {
+        switch(document.getElementById("message")?.innerHTML){
+            case "Buscando actualización...":
+            case "Status Message...":
+                setStatusUpdate('searching')
+            break;
+            case "Nueva actualización disponible. Descargando...":
+                setStatusUpdate('downloading')
+            break;
+            case "No hay actualizaciones disponibles.":
+            default:
+                setStatusUpdate('success')
+                break;
+        }
+    }, [document.getElementById("message")?.innerHTML]);
   return (
     <AppBar 
     position="fixed"
@@ -68,8 +85,14 @@ export const NavBar = ({handleLiquidationOpen,setOpenMenu,drawerWidth}) => {
                 width={"100%"}
             >
                 <Typography variant="h6" noWrap component='div'>{UserModified}</Typography>
-                <Typography variant="body1" id="message">Checking Update...</Typography>
-                <Box>
+                <Typography sx={{display:'none'}} variant="body1" id="message">Status Message...</Typography>
+                
+                <Box display={"flex"} alignItems="center">
+                    <Tooltip title={(document.getElementById("message")) ? document.getElementById("message").innerHTML : "None"} placement="bottom">
+                        <CheckCircleIcon color="success" sx={{mr:2,display:statusUpdate === 'success' ? 'block' : 'none'}}/>
+                        <CircularProgress size={20} color="inherit" sx={{mr:2,display:statusUpdate === 'searching' ? 'block' : 'none'}}/>
+                        <BrowserUpdatedIcon color="white" sx={{mr:2,display:statusUpdate === 'downloading' ? 'block' : 'none'}}/>
+                    </Tooltip>
                     <Button onClick={handleLiquidationOpen}
                         variant='contained' 
                         color='success'
