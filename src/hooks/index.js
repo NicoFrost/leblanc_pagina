@@ -11,4 +11,4 @@ export * from './useUIStore';
 export * from './useMethodStore';
 export * from './useSalariesStore';
 export * from './usePaymentsStore';
-// export * from './useUserStore';
+export * from './useFaultsStore';

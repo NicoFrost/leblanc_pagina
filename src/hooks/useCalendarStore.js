@@ -65,12 +65,12 @@ export const useCalendarStore = () => {
       const events = contracts.flatMap((c) => generateEventsForContract(c, getEmployeeById, getBuildingByID))
       const eventsWithFeriados = convertEventsToDateEvents(events).concat(
         feriados.map(f => ({
-          id: `feriado-${dayjs(f.fecha).format('YYYYMMDD')}`,
+          id: `f-${dayjs(f.fecha).format('YYYYMMDD')}`,
           title: f.nombre,
           start: dayjs(f.fecha).startOf('day').toDate(),
           end: dayjs(f.fecha).endOf('day').toDate(),
           notes: 'Feriado Nacional',
-          contractId: null
+          feriado: true
         }))
       );
       // console.log(eventsWithFeriados);
@@ -81,6 +81,25 @@ export const useCalendarStore = () => {
       console.log({msg: 'Error cargando evento',error});
     }
   }
+
+  const startLoadingFeriados = async () => {
+    try {
+      const response = await fetch('https://api.argentinadatos.com/v1/feriados/2026');
+      const feriados = await response.json();
+      const eventsFeriados = feriados.map(f => ({
+        id: `f-${dayjs(f.fecha).format('YYYYMMDD')}`,
+        title: f.nombre,
+        start: dayjs(f.fecha).startOf('day').toDate(),
+        end: dayjs(f.fecha).endOf('day').toDate(),
+        notes: 'Feriado Nacional',
+        feriado: true
+      }));
+      dispatch(onLoadEvents(eventsFeriados));
+    } catch (error) {
+      console.log({msg: 'Error cargando feriados',error});
+    }
+  }
+
   
   const startUpdatingEventsForContract = async (contract) => {
     try {
@@ -102,6 +121,7 @@ export const useCalendarStore = () => {
     startSavingEvent,
     startDeletingEvent,
     startLoadingEvents,
+    startLoadingFeriados,
     startUpdatingEventsForContract
   }
 

@@ -5,15 +5,16 @@ import {
   buildingsSlice,
   contractsSlice,
   employeesSlice,
-    methodsSlice,
+  methodsSlice,
   userSlice,
   expensesSlice,
   invoicesSlice,
   calendarSlice,
   salariesSlice,
   paymentsSlice,
+  collectionsSlice,
+  faultSlice,
 } from "./";
-import { collectionsSlice } from './system/collectionSlice';
 
 
 
@@ -31,6 +32,7 @@ export const store = configureStore({
         collections: collectionsSlice.reducer,
         calendar: calendarSlice.reducer,
         salaries: salariesSlice.reducer,
+        faults: faultSlice.reducer,
         payments: paymentsSlice.reducer,
         user: userSlice.reducer,
         ui: uiSlice.reducer

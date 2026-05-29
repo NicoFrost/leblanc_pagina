@@ -3,7 +3,7 @@ import { useMethodStore, usePaymentsStore, useSalariesStore, useUIStore } from '
 import { Box, Divider, List, ListItemButton, ListItemText, ListSubheader, Modal, Typography } from '@mui/material'
 import { ModalLayout } from '../layout/ModalLayout'
 
-    export const SalaryModal = () => {
+export const SalaryModal = () => {
 
 
     const {isSalaryModalOpen,closeSalaryModal} = useUIStore()

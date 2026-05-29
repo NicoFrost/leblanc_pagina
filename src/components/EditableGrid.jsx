@@ -61,7 +61,7 @@ const ExampleRow = [
 
 
 
-export const EditableGrid = ({dataStyle,height = "250px",mTop = "0px",colorTitle,loadState,buttonsPosition = 'start',pagination = [5,25,100,240],children,rowSelection = false,onSelection,onAdd,onEdit,onDelete,rows = ExampleRow,columns = ExampleColumn,activeElement = {},CRUDButtons = true,ActiveAndInactiveSelect = false,slots,title = "",spacing = "0px",...otherSettings}) => {
+export const EditableGrid = ({dataStyle,height = "250px",mTop = "0px",colorTitle,loadState,buttonsPosition = 'start',pagination = [5,25,100,240],children,rowSelection = false,onSelection,onAdd,onEdit,onDelete,rows = ExampleRow,columns = ExampleColumn,activeElement = {},CRUDButtons = true,ActiveAndInactiveSelect = false,slots,titleDecoration = false,title = "",spacing = "0px",...otherSettings}) => {
   
   // console.log(Object.keys(rowSelection).length == 0);
   const {darkMode} = useUIStore()
@@ -94,10 +94,10 @@ export const EditableGrid = ({dataStyle,height = "250px",mTop = "0px",colorTitle
   return (
     <Box className="editable-grid-box" sx={{marginBottom:spacing,display: "flex",flexDirection: "column"}}>
       {
-        (title != '' && CRUDButtons == false) &&
+        (titleDecoration) &&
         (<Divider sx={{ marginBottom: "10px", "::before": { borderColor: "primary.main" }, "::after": { borderColor: "primary.main" }}}>
           <Typography sx={{color:colorTittleContrast}} fontSize={"22px"}>
-              {title}
+            {title}
           </Typography>
         </Divider>)
       }
@@ -109,7 +109,7 @@ export const EditableGrid = ({dataStyle,height = "250px",mTop = "0px",colorTitle
         }}
       >
         {
-          (title != "" && CRUDButtons) &&
+          (!titleDecoration) &&
             (
               <Typography fontSize={"22px"} sx={{color:colorTittleContrast}}>
                 {title}
@@ -206,4 +206,6 @@ EditableGrid.propTypes = {
   slots: PropTypes.object,
   title: PropTypes.string,
   spacing: PropTypes.string,
+  titleDecoration: PropTypes.bool,
+  inverted: PropTypes.bool
 }

@@ -25,6 +25,7 @@ function countWeekdayInMonth(weekday, month, year, limitDate) {
  * @param {number} mes - Número del mes (1-12) para el cual calcular las horas
  * @param {number} año - Año para el cual calcular las horas
  * @param {dayjs.Dayjs} limitDate - Fecha límite para contar los días (inclusive)
+ * @param {Array<{hours: number}>} faultsEmployee - Array de objetos de faltas del empleado, cada uno con una propiedad 'hours' que indica las horas a descontar
  * @returns {number|undefined} Total de horas mensuales. Retorna undefined si algún parámetro es falsy
  * 
  * @example
@@ -34,7 +35,7 @@ function countWeekdayInMonth(weekday, month, year, limitDate) {
  * ];
  * calcularHorasMensuales(turnos, 3, 2024); // Retorna total de horas en marzo 2024
  */
-export default function calcularHorasMensuales(turnos, mes, año, limitDate) {
+export default function calcularHorasMensuales(turnos, mes, año, limitDate, faultsEmployee,) {
   
   if(!(turnos || mes || año)) return;
 
@@ -51,12 +52,12 @@ export default function calcularHorasMensuales(turnos, mes, año, limitDate) {
     const horas = end.diff(start, 'minute') / 60;
     
     const ocurrencias = countWeekdayInMonth(map[dia], mes, año,limitDate);
-    
+      
     // console.log(`Día: ${dia} | ${map[dia]} - Horas por turno: ${horas} - Ocurrencias en mes: ${ocurrencias} - ${mes} - ${año} - ${limitDate}`);
     
-    total += horas * ocurrencias;
+    total += horas * (ocurrencias);
     
   }
-
-  return total;
+  
+  return total - (faultsEmployee ? faultsEmployee.reduce((acc, fault) => acc + fault.hours, 0) : 0);
 }

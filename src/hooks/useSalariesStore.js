@@ -11,6 +11,8 @@ export const useSalariesStore = () => {
     const {payments} = useSelector(state => state.payments);
     const {employees} = useSelector(state => state.employee);
     const {contracts} = useSelector(state => state.contract);
+    const {faults} = useSelector(state => state.faults);
+    const {events} = useSelector(state => state.calendar)
     const dispatch = useDispatch();
 
 
@@ -143,33 +145,67 @@ export const useSalariesStore = () => {
         dispatch(onSetActiveSalary(salaries.find(s => s.id === salary)));
     }
     
-    const startLiquidationSalaries = async (settlementDate) => {
+    const startLiquidationSalaries = async (settlementDate,hourMultiplier = 1) => {
         try {
             if(!settlementDate) throw new Error("Invalid settlement date");
             // Lógica de liquidación aquí
 
             employees.forEach(async employee => {
-
+                if(!employee.state) return;
                 const contract = contracts.find(contract => contract.employeeId === employee.id);
+                if(!contract) return;
+                const faultsEmployee = faults.filter(fault => fault.employeeId === employee.id && dayjs(fault.date).month() === settlementDate.month() && dayjs(fault.date).year() === settlementDate.year());
 
+                const feriados = events.filter(event => (dayjs(event.start).month() === settlementDate.month() && dayjs(event.start).year() === settlementDate.year()) && event.feriado)
+                console.log(employee,contract,faultsEmployee,feriados);
 
+                let horasFeriados = 0;
 
-                const totalHoras = calcularHorasMensuales(contract.days,settlementDate.month(),settlementDate.year(), contract.endDate);
+                feriados.forEach(feriado => {
+                    // ! SE DEBE REMPLAZAR LA LETRA POR NUMEROS PARA MEJOR DESARROLLO Y AHORRO DE PROCESOS
+                    const mapDays = {"L":1, "M":2, "X":3, "J":4, "V":5, "S":6, "D":0};
+                    contract.days.forEach(day => {
+                        if(mapDays[day[0]] === dayjs(feriado.start).day()){
+                            const start = dayjs(`2020-01-01 ${day[1].split("-")[0]}`);
+                            const end   = dayjs(`2020-01-01 ${day[1].split("-")[1]}`);
+                            
+                            const horas = end.diff(start, 'minute') / 60;
+                            
+                            horasFeriados += horas;
+                        }
+                    });
+                    // if(dayjs(feriado.start).day() === )
+                })
                 
-                const dataDB = await window.api.createSalary({
+                const totalHoras = calcularHorasMensuales(contract.days,settlementDate.month(),settlementDate.year(), contract.endDate,faultsEmployee);
+                
+                console.log("Total horas: ", horasFeriados);
+                console.log("Total horas mes: ", totalHoras - horasFeriados, faultsEmployee.reduce((acc, fault) => acc + fault.hours, 0));
+                console.log("Monto feriados: ", horasFeriados * contract.hoursPerDay * hourMultiplier);
+                console.log("Monto horas normales: ", contract.hoursPerDay * (totalHoras - horasFeriados));
+                console.log({
                     employeeId: employee.id,
-                    grossAmount: (contract.hourlyRate * totalHoras),
+                    grossAmount: ((contract.hoursPerDay * (totalHoras - horasFeriados) ) + (horasFeriados * contract.hoursPerDay * hourMultiplier)),
                     period: settlementDate.year() + "-" + (settlementDate.month() + 1),
                     paidDate: settlementDate.toDate(),
                     paid: false,
                     state: true,
-                });
-                console.log(dataDB);
+                })
+                // const dataDB = await window.api.createSalary({
+                //     employeeId: employee.id,
+                //     grossAmount: ((contract.hoursPerDay * totalHoras) + (horasFeriados * contract.hoursPerDay * hourMultiplier)),
+                //     period: settlementDate.year() + "-" + (settlementDate.month() + 1),
+                //     paidDate: settlementDate.toDate(),
+                //     paid: false,
+                //     state: true,
+                // });
+                // console.log(dataDB);
+                console.log(totalHoras,feriados.length,(contract.hoursPerDay * totalHoras) + (feriados.length * contract.hoursPerDay))
                 
-                dispatch(onAddSalary({
-                    ...dataDB,
-                    date: dayjs(dataDB.date),
-                }));
+                // dispatch(onAddSalary({
+                //     ...dataDB,
+                //     date: dayjs(dataDB.date),
+                // }));
 
                 enqueueSnackbar("Salario de " + employee.name + " para " + settlementDate.year() + "-" + (settlementDate.month() + 1), { variant: 'success' });
             })

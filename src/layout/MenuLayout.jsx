@@ -1,15 +1,15 @@
 import { useState } from "react";
 
-import { Alert, Box, createTheme, Snackbar, ThemeProvider } from "@mui/material"
+import { Alert, Box, createTheme, Drawer, Snackbar, ThemeProvider, Typography } from "@mui/material"
 import PropTypes from 'prop-types';
 // import { motion } from "framer-motion";
 
 
-import { NavBar, SideBar } from "../components";
+import { FaultForm, NavBar, SideBar } from "../components";
 import { BuildingModal, EmployeeModal, InvoiceModal } from "../modals";
 import { ContractModal } from "../modals/ContractModal";
 import { ExpensesModal } from "../modals/ExpensesModal";
-import { useBuildingsStore, useEmployeesStore, useExpensesStore, useMethodStore, useSalariesStore } from "../hooks";
+import { useBuildingsStore, useEmployeesStore, useExpensesStore, useMethodStore, useSalariesStore, useUIStore } from "../hooks";
 import { useContractsStore } from "../hooks/useContractStore";
 import { useInvoiceStore } from "../hooks/useInvoiceStore";
 import { MonthPicker } from "../components/MonthPicker";
@@ -69,7 +69,7 @@ export const MenuLayout = ({children}) => {
   const {activeSalary} = useSalariesStore()
   const {activeMethod} = useMethodStore()
   const [open, setOpen] = useState(false);
-
+  const {isFaultDrawerOpen,closeFaultDrawer} = useUIStore();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -102,6 +102,7 @@ export const MenuLayout = ({children}) => {
       },
     },
   });
+
   return (
     // <motion.div
     //   initial={{opacity:0,transition: {duration: 1}}}
@@ -115,6 +116,7 @@ export const MenuLayout = ({children}) => {
           sx={{
             display:"flex",
           }}
+          // key={anchor}
         >
 
           {/* NavBar drawerWidth*/}
@@ -147,6 +149,14 @@ export const MenuLayout = ({children}) => {
             open={open} 
             onClose={handleClose} 
           />
+          <Drawer
+            anchor={'right'}
+            open={!!isFaultDrawerOpen}
+            onClose={closeFaultDrawer}
+          >
+            {/* FORM WITH 1 employee selector, 1 date picker, 1 text field for hours, 1 text field for reason */}
+            <FaultForm onClose={closeFaultDrawer}/>              
+          </Drawer>
         </Box>
       </SnackbarProvider>
     </ThemeProvider>

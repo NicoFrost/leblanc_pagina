@@ -12,6 +12,10 @@ const initialState = {
     isInvoiceModalOpen: false,
     isDateModalOpen: false,
     isUserModalOpen: false,
+    isFaultDrawerOpen: false,
+    isSalaryModalOpen: false,
+    isPaymentModalOpen: false,
+    isMethodModalOpen: false,
     darkMode: false
 };
 
@@ -87,7 +91,13 @@ export const uiSlice = createSlice({
         },
         onToggleDarkMode: (state,{payload}) => {
             state.darkMode = payload;
-        }
+        },
+        onOpenFaultDrawer: (state,{payload}) => {
+            state.isFaultDrawerOpen = payload || true;
+        },
+        onCloseFaultDrawer: (state) => {
+            state.isFaultDrawerOpen = false;
+        },
     },
 });
 
@@ -130,4 +140,7 @@ export const {
     onCloseMethodModal,
 
     onToggleDarkMode,
+
+    onOpenFaultDrawer,
+    onCloseFaultDrawer
 } = uiSlice.actions;

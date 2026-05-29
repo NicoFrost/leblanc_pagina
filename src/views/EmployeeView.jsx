@@ -1,9 +1,11 @@
 import React from 'react'
-import { usePaymentsStore,useSalariesStore, useEmployeesStore, useForm, useUIStore } from '../hooks'
+import { usePaymentsStore,useFaultsStore,useSalariesStore, useEmployeesStore, useForm, useUIStore } from '../hooks'
 import { Box, Divider, Typography } from '@mui/material'
 import { EditableGrid, FormCollection } from '../components'
 import dayjs from 'dayjs'
 import { enqueueSnackbar } from 'notistack'
+
+
 
 
 const initialForm = {id: 0,date: new Date(),amount: '',methodId: '',type: '',salaryId: 0}
@@ -12,13 +14,28 @@ export const EmployeeView = () => {
   const {formState,onInputChange,onResetForm} = useForm(initialForm)
   const {salaries,activeSalary,setActiveSalary, setSettleSalary} = useSalariesStore()
   const {employees} = useEmployeesStore()
+  const {faults,activeFault,setActiveFault} = useFaultsStore()
   const {payments,startSavingPayment} = usePaymentsStore();
-  const {openSalaryModal,darkMode} = useUIStore();
+  const {openFaultDrawer,openSalaryModal,darkMode} = useUIStore();
 
   const [selection, setSelection] = React.useState({
     type: 'include', // or 'exclude'
     ids: new Set([]),
   });
+
+  const columnsAusencias = [
+    { field: 'id', headerName: 'ID', width: 70 }, 
+    { field: 'employeeId', headerName: 'Empleado', width: 150,
+      valueGetter: (v,r) => {
+        return employees.find(e => e.id == r.employeeId)?.name  || 'No asignado'
+      }
+    },
+    { field: 'date', headerName: 'Fecha', width: 150,
+      valueGetter: (v) => v.format('DD/MM/YYYY')
+    },
+    { field: 'hours', headerName: 'Horas', width: 150,},
+    { field: 'reason', headerName: 'Razon', width: 100 },
+  ]
 
   const salariesColumn = [
     { field: 'id', headerName: 'ID', width: 70 }, 
@@ -85,18 +102,29 @@ export const EmployeeView = () => {
     openSalaryModal('edit')
     setActiveSalary(e.id)
   }
-  
+    
   return (
     <Box sx={{
       display:"flex",justifyContent:"center",
       marginLeft:{xs:"10px",sm:"5px",lg:"20px"},
+      marginY:"50px",
       width:{xs:"85vw",sm:"54vw",md:"75vw",xl:"80vw"},
     }}>
       <Box width={"100%"}>
         <EditableGrid
+          columns={columnsAusencias}
+          rows={faults}
+          titleDecoration={true}
+          title='Ausencias'
+          colorTitle={'secondary'}
+          buttonsPosition='end'
+          inverted
+          onAdd={openFaultDrawer}
+        />
+        <EditableGrid
           columns={salariesColumn}
           rows={salaries}
-          
+          titleDecoration={true}
           title='Sueldos'
           colorTitle={'secondary'}
           CRUDButtons={false}
@@ -131,9 +159,12 @@ export const EmployeeView = () => {
           //   })
           // }}
         />
-      <Divider sx={{margin:"10px 0 30px 0","::before": { borderColor: "primary.main" }, "::after": { borderColor: "primary.main" }}}>
-        <Typography sx={{color:darkMode ? "secondary.contrastText" : "secondary.main" }} variant='h5'>Pagos</Typography>
-      </Divider>
+      {/* <Divider sx={{margin:"10px 0 30px 0","::before": { borderColor: "primary.main" }, "::after": { borderColor: "primary.main" }}}>
+        <Typography sx={{color:darkMode ? "secondary.contrastText" : "secondary.main" }} variant='h5'>Ausencias</Typography>
+      </Divider> */}
+      {/* <Divider sx={{margin:"10px 0 30px 0","::before": { borderColor: "primary.main" }, "::after": { borderColor: "primary.main" }}}> */}
+        <Typography sx={{margin:"10px 0 30px 0",textAlign:'center',color:darkMode ? "secondary.contrastText" : "secondary.main" }} variant='h5'>Pagos</Typography>
+      {/* </Divider> */}
       <FormCollection
         formState={formState}
         onInputChange={onInputChange}

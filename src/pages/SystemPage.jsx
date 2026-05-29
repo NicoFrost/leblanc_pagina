@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { MenuLayout } from '../layout/MenuLayout'
 import { BuildingsView, FinancesView, HomeView, UsersView } from '../views';
-import { useBuildingsStore, useCalendarStore, useCollectionStore, useEmployeesStore, useExpensesStore, useInvoiceStore, useUIStore } from '../hooks';
+import { useBuildingsStore, useCalendarStore, useCollectionStore, useEmployeesStore, useExpensesStore, useFaultsStore, useInvoiceStore, useUIStore } from '../hooks';
 import { useContractsStore } from '../hooks/useContractStore';
 import { ReportsView } from '../views/ReportsView';
 import { CalendarPage } from '../views/CalendarPage';
@@ -20,10 +20,11 @@ export const SystemPage = () => {
   const {startLoadingContracts, contracts} = useContractsStore();
   const {startLoadingInvoices} = useInvoiceStore();
   const {startLoadingCollections} = useCollectionStore();
-  const {startLoadingEvents} = useCalendarStore()
+  const {startLoadingEvents,startLoadingFeriados} = useCalendarStore()
   const {startLoadingMethods} = useMethodStore()
   const {startLoadingSalaries} = useSalariesStore()
   const {startLoadingPayments} = usePaymentsStore()
+  const {startLoadingFaults} = useFaultsStore()
   let element;
   
   useEffect(() => {
@@ -37,6 +38,7 @@ export const SystemPage = () => {
       await startLoadingMethods();
       await startLoadingSalaries();
       await startLoadingPayments();
+      await startLoadingFaults();
     };
     loadData();
   }, [])
@@ -44,9 +46,10 @@ export const SystemPage = () => {
   useEffect(() => {
     if (contracts.length > 0) {
       startLoadingEvents();
+    } else {
+      startLoadingFeriados();
     }
   }, [contracts])
-  
 
   switch (activeMenu) {
     case "home": 

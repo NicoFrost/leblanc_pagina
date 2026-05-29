@@ -39,6 +39,10 @@ import {
     onOpenMethodModal,
     onCloseMethodModal,
     onToggleDarkMode,
+
+    // Faults
+    onOpenFaultDrawer,
+    onCloseFaultDrawer
 } from "../store/ui/uiSlice"
 import {
     useBuildingsStore,
@@ -63,6 +67,7 @@ export const useUIStore = () => {
         isSalaryModalOpen,
         isPaymentModalOpen,
         isMethodModalOpen,
+        isFaultDrawerOpen,
         darkMode
     } = useSelector(state => state.ui)
 
@@ -256,7 +261,13 @@ export const useUIStore = () => {
         dispatch(onToggleDarkMode(!darkMode))
     }
  
+    const openFaultDrawer = (mode) => {
+        dispatch(onOpenFaultDrawer(mode))
+    }
 
+    const closeFaultDrawer = () => {
+        dispatch(onCloseFaultDrawer())
+    }
 
     return {
         // MENU
@@ -317,6 +328,11 @@ export const useUIStore = () => {
         closeMethodModal,
 
         darkMode,
-        toggleDarkMode
+        toggleDarkMode,
+
+        // Faults
+        isFaultDrawerOpen,
+        openFaultDrawer,
+        closeFaultDrawer
     }
 }

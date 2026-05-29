@@ -422,7 +422,7 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
                                                 <MenuItem disabled={isEmployeeOccupied(element.id)}  key={element.id} value={element.id}>{element.name}</MenuItem>
                                             ))
                                         ) : (
-                                            <h4>No hay empleados disponibles</h4>
+                                            <MenuItem value="" disabled>No hay empleados disponibles</MenuItem>
                                         )
                                     }
                                 </Select>
@@ -449,7 +449,7 @@ export const ContractModal = ({initialForm = initialFormShape}) => {
                                                 <MenuItem key={element.id} value={element.id}>{element.buildingName}</MenuItem>
                                             ))
                                         ) : (
-                                            <h4>No hay edificios disponibles</h4>
+                                           <MenuItem value="" disabled>No hay edificios disponibles</MenuItem>
                                         )
                                     }
                                 </Select>
